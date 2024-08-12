@@ -31,7 +31,7 @@ export default function ResetPassword() {
     <>
       <form
         onSubmit={formik.handleSubmit}
-        class="w-[50%] forgetPassowrdForm h-fit rounded-xl shadow-2xl bg-opacity-85 px-20 py-5 relative bg-white flex items-center justify-center flex-col">
+        class="lg:w-[50%] w-[95%] forgetPassowrdForm h-fit rounded-xl shadow-2xl bg-opacity-85 px-20 py-5 relative bg-white flex items-center justify-center flex-col">
         <div className="title mb-14">
           <h1 className="text-[25px]">Reset Your Password</h1>
         </div>

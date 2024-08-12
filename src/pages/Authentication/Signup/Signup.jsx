@@ -61,7 +61,7 @@ export default function Signup() {
     <>
       <div className="loginSec w-full h-screen relative z-20">
         <div className="container  flex items-center justify-center mx-auto  h-full z-50 relative">
-          <div className="FormContainer bg-white w-[50%] h-auto rounded-xl shadow-2xl bg-opacity-85 px-12 py-5 z-50 relative">
+          <div className="FormContainer bg-white w-[97%] lg:w-[50%] h-auto rounded-xl shadow-2xl bg-opacity-85 px-12 py-5 z-50 relative">
             <h1 className="text-[30px] font-bold text-center mt-2 mb-4">
               Sign up
             </h1>

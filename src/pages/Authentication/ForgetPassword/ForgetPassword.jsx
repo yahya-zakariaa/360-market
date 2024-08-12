@@ -47,7 +47,7 @@ export default function ForgetPassword() {
      {!resetCode ? (
       <form
       onSubmit={formikForgetPassword.handleSubmit}
-      className="w-[50%] forgetPassowrdForm h-fit rounded-xl shadow-2xl bg-opacity-85 px-20 py-5 relative bg-white flex items-center justify-center flex-col">
+      className="w-[95%] lg:w-[50%] forgetPassowrdForm h-fit rounded-xl shadow-2xl bg-opacity-85 px-20 py-5 relative bg-white flex items-center justify-center flex-col">
       <div className="title mb-14">
         <h1 className="text-[25px]">Forget Password?</h1>
       </div>

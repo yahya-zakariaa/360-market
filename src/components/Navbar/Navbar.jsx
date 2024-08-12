@@ -77,7 +77,10 @@ export default function Navbar() {
             </Badge>
             <Badge
               className="mt-[3px] me-[-1px] text-[12px] w-[1px] h-[1px] bg-gray-100 text-black"
-              content={userCart?.data?.products?.reduce((a, b) => a + b.count, 0)}>
+              content={userCart?.data?.products?.reduce(
+                (a, b) => a + b.count,
+                0
+              )}>
               <Link
                 to={"/cart"}
                 className="nav-link text-black mt-[2px]  nav-cart flex items-center">
@@ -89,30 +92,14 @@ export default function Navbar() {
               className="nav-toggle text-black  items-center flex me-2 text-[25px]  ">
               <i class="fa-solid fa-bars"></i>
             </button>
-            {
-              !localStorage.getItem("userToken") && (
-                <Link
-                  className="bg-black text-white flex items-center hover:text-black hover:bg-transparent border transition-all duration-500 border-transparent  hover:border-black hover:border px-5 py-1 rounded-full"
-                  to={"/login"}>
-                  Login{" "}
-                  <i class="fa-solid fa-right-to-bracket fa-flip-horizontal ms-[6px]"></i>
-                </Link>
-              ) //</div> : (
-              //   <button
-              //     className="bg-red-700 text-white flex items-center hover:text-red-700 hover:bg-transparent border transition-all duration-500 border-transparent  hover:border-red-700 hover:border px-5 py-1 rounded-full"
-              //     onClick={() => Logout()}>
-              //     Log out <i class="fa-solid fa-right-to-bracket ms-1 "></i>
-              //   </button>
-              // )
-            }
           </div>
         </div>
       </nav>
       <aside
         className={
           toggle
-            ? "w-[40%] h-screen lg:w-[20%]   lg:h-screen fixed top-[55px] right-0 transition-all duration-700 bg-gray-100 z-[9999]"
-            : "w-[40%] h-screen lg:w-[20%]   lg:h-screen fixed top-[55px] right-[-50%] transition-all duration-700 bg-gray-100 z-[9999]"
+            ? "w-[40%] h-screen lg:w-[20%] pb-10  lg:h-screen fixed top-[55px] right-0 transition-all duration-700 bg-gray-100 z-[9999]"
+            : "w-[40%] h-screen lg:w-[20%] pb-10  lg:h-screen fixed top-[55px] right-[-50%] transition-all duration-700 bg-gray-100 z-[9999]"
         }>
         <div className=" flex flex-col justify-between items-center h-[90%] w-full">
           <ul className="flex flex-col items-center py-7 gap-3 w-full">
@@ -121,6 +108,7 @@ export default function Navbar() {
               className="nav-item w-full hover:bg-gray-300  transition-all duration-200 text-center text-[18px] py-2">
               home
             </a>
+
             <a
               href="#"
               className="nav-item w-full hover:bg-gray-300  transition-all duration-200 text-center text-[18px] py-2">
@@ -147,7 +135,25 @@ export default function Navbar() {
               Support
             </a>
           </ul>
-          {userToken && (
+          <div className="btns-group w-full flex flex-col  items-center justify-center gap-5">
+            {!localStorage.getItem("userToken") && (
+              <Link
+                className="bg-black text-white  text-center text-[18px] py-2 flex justify-center items-center hover:text-black hover:bg-transparent border transition-all duration-500 border-transparent  hover:border-black hover:border  w-[80%] rounded-lg"
+                to={"/login"}>
+                <i class="fa-solid fa-right-to-bracket fa-flip-horizontal me-[10px]"></i>
+                Login{" "}
+              </Link>
+            )}
+            {!localStorage.getItem("userToken") && (
+              <Link
+                className="bg-transparent text-black  text-center text-[18px] py-2 flex justify-center items-center hover:text-white hover:bg-black  transition-all duration-500 border-black  border  w-[80%] rounded-lg"
+                to={"/signup"}>
+                <i class="fa-solid fa-user me-[9px]"></i>
+                Signup
+              </Link>
+            )}
+          </div>
+          {localStorage.getItem("userToken") && (
             <button
               onClick={Logout}
               className="nav-item w-[70%] rounded-xl bg-red-700 hover:bg-red-900 text-white transition-all duration-200 text-center text-[18px] py-2">
