@@ -1,0 +1,16 @@
+.nav-cart,.nav-account{
+    font-size: 20px;
+    width: 30px;
+    height: 30px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+#CategoriesSec{
+    background:linear-gradient(rgba(0, 0, 0, 0.6),rgba(0, 0, 0, 0.8)), url("../../assets/categories-bg.jpg");
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+}

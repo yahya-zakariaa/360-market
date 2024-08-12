@@ -1,0 +1,10 @@
+.FormContainer{
+    backdrop-filter: blur(30px) !important;
+}
+
+.loginSec{
+    background: linear-gradient(rgba(0, 0, 0, 0.4),rgba(0, 0, 0, 0.1)), url("../../assets/login-signup-bg.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
