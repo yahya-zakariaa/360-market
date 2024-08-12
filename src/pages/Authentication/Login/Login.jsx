@@ -51,7 +51,7 @@ export default function Login() {
       <div className="FormContainer bg-white w-[96%] lg:w-[50%] h-[70%] lg:h-[80%] rounded-xl shadow-2xl bg-opacity-85 px-12 py-5 z-50 relative">
         <h1 className="text-[30px] font-bold text-center mb-[-30px]">Login</h1>
         <form
-          className="h-full flex items-center flex-col justify-center"
+          className="h-full flex items-center flex-col justify-center w-full"
           onSubmit={formik.handleSubmit}>
           <div className="inputContainer relative flex  w-[80%] mx-auto items-center justify-center mb-5">
             <label htmlFor="email" className="mt-[9px] me-3 text-[20px]">
