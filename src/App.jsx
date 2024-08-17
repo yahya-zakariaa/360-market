@@ -13,6 +13,8 @@ import { Toaster } from "react-hot-toast";
 import UserContextProvider from "./Context/UserContext";
 import ProductDetails from "./pages/ProductDetails/ProductDetails";
 import Cart from "./pages/Cart/Cart";
+import ProtectedRoute from "./pages/ProtectedRoute/ProtectedRoute";
+import WishList from "./pages/WishList/WishList";
 function App() {
   const [categories, setCategories] = useState([]);
   const [popularProducts, setPopularProducts] = useState([]);
@@ -41,8 +43,8 @@ function App() {
     <>
       <Router>
         <Toaster
-          position="top-right"
-          containerStyle={{ zIndex: 9999, top: 80 }}
+          position="top-center"
+          containerStyle={{ zIndex: 9999, top: 80 } }
         />
         <Routes>
           <Route element={<Layout />} path="/">
@@ -55,7 +57,24 @@ function App() {
               }
               index={true}
             />
-            <Route element={<Cart />} path="/cart" />
+
+            <Route element={<Home />} path="/home"></Route>
+            <Route
+              element={
+                <ProtectedRoute>
+                  <Cart />
+                </ProtectedRoute>
+              }
+              path="/cart"
+            />
+            <Route
+              element={
+                <ProtectedRoute>
+                  <WishList />
+                </ProtectedRoute>
+              }
+              path="/wishlist"
+            />
           </Route>
           <Route element={<ProductDetails />} path="/product/:id" />
           <Route element={<Auth />} path="/login">

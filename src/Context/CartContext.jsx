@@ -18,10 +18,6 @@ export default function CartProvider({ children }) {
         }
       );
       setUserCart(response.data);
-
-      // get cart length
-
-      console.log(cartLength);
     } catch (error) {}
   }
 
@@ -41,8 +37,7 @@ export default function CartProvider({ children }) {
       )
       .then((response) => {
         getUserCart();
-        console.log(response.data);
-        
+
         toast.success(response.data.message, { position: "top-center" });
       })
       .catch((error) => {

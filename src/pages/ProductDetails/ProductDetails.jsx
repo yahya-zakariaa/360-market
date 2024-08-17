@@ -33,7 +33,7 @@ export default function ProductDetails() {
     <div className=" w-full bg-gray-200 p-1 ">
       <Link
         to={"/"}
-        className="bg-black mt-5 ml-20 w-fit text-[19px] flex items-center justify-start px-4 py-2 text-white rounded-full">
+        className="bg-black mt-5 ml-[7%] lg:ml-20 w-fit text-[19px] flex items-center justify-start px-4 py-2 text-white rounded-full">
         <i class="fa-solid fa-arrow-left mr-2 mt-[1px]"></i> back
       </Link>
       <div className="product-details lg:flex-row flex-col flex w-full justify-between px-10 lg:px-20 py-9">
@@ -57,6 +57,7 @@ export default function ProductDetails() {
           </Carousel>
         </div>
         <div className="product-info lg:w-[50%] w-[100%] pt-10">
+          <p className="text-gray-600 font-bold mb-3 text-[14px]"> {product.category.name}{` > `}{product.subcategory[0].name}</p>
           <h1 className="product-title font-bold text-[23px] lg:text-[30px] mb-3">
             {product.title}
           </h1>

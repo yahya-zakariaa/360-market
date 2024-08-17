@@ -7,17 +7,20 @@ import { ThemeProvider } from "@material-tailwind/react";
 import IsReceiveCodeProvider from "./Context/receiveCodeStatus.jsx";
 import UserContextProvider from "./Context/UserContext.jsx";
 import CartProvider, { CartContext } from "./Context/CartContext.jsx";
+import WishlistProvider from "./Context/Wishlist.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-      <UserContextProvider>
-    <CartProvider>
-        <IsReceiveCodeProvider>
-          <ThemeProvider>
-            <App />
-          </ThemeProvider>
-        </IsReceiveCodeProvider>
-    </CartProvider>
-      </UserContextProvider>
+    <UserContextProvider>
+      <CartProvider>
+        <WishlistProvider>
+          <IsReceiveCodeProvider>
+            <ThemeProvider>
+              <App />
+            </ThemeProvider>
+          </IsReceiveCodeProvider>
+        </WishlistProvider>
+      </CartProvider>
+    </UserContextProvider>
   </React.StrictMode>
 );

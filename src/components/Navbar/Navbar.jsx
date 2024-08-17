@@ -4,16 +4,19 @@ import { Badge, Button } from "@material-tailwind/react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../Context/UserContext";
 import { CartContext } from "../../Context/CartContext";
+import { WishlistContext } from "../../Context/Wishlist";
 
 export default function Navbar() {
-  const { userToken, setUserToken } = useContext(UserContext);
+  const { setUserToken } = useContext(UserContext);
   const [toggle, setToggle] = useState(false);
   const { getUserCart, userCart } = useContext(CartContext);
+  const { wishlist, getWishlist } = useContext(WishlistContext);
   const Navigate = useNavigate();
 
   localStorage.getItem("userToken") &&
     useEffect(() => {
       getUserCart();
+      getWishlist();
     }, []);
 
   function Logout() {
@@ -67,23 +70,23 @@ export default function Navbar() {
 
           <div className="nav-actions flex gap-10 items-center  ">
             <Badge
-              className="mt-[] me-[-7px] text-[12px] w-[1px] h-[1px] bg-gray-100 text-black"
-              content="2">
+              className=" mt-[-2px] me-[-8px] text-[12px] w-[1px] h-[1px] bg-gray-100 text-black"
+              content={wishlist?.count}>
               <Link
-                href="#"
+                to={"/wishlist"}
                 className="nav-link text-black mt-[2px] text-[24px]  nav-wishlist flex items-center">
                 <i class="fa-solid fa-heart"></i>
               </Link>
             </Badge>
             <Badge
-              className="mt-[3px] me-[-1px] text-[12px] w-[1px] h-[1px] bg-gray-100 text-black"
+              className=" mt-[-2px] me-[-8px] text-[12px] w-[1px] h-[1px] bg-gray-100 text-black"
               content={userCart?.data?.products?.reduce(
                 (a, b) => a + b.count,
                 0
               )}>
               <Link
                 to={"/cart"}
-                className="nav-link text-black mt-[2px]  nav-cart flex items-center">
+                className="nav-link text-black mt-[2px] text-[24px]  nav-wishlist flex items-center">
                 <i class="fa-solid fa-bag-shopping"></i>
               </Link>
             </Badge>

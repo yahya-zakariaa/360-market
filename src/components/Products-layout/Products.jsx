@@ -1,36 +1,60 @@
 import { Carousel } from "@material-tailwind/react";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../../Context/UserContext";
 import toast from "react-hot-toast";
 import { CartContext } from "../../Context/CartContext";
+import { WishlistContext } from "../../Context/Wishlist";
 
 export default function Products({ products }) {
-  const {addToCart} = useContext(CartContext);
+  const { addToCart } = useContext(CartContext);
   const { userToken } = useContext(UserContext);
-  
-  
+  const { addToWishList, wishlist, getWishlist } = useContext(WishlistContext);
+
+  localStorage.getItem("userToken") &&
+    useEffect(() => {
+      getWishlist();
+    }, []);
   return (
     <>
-      {products.map((item) => {
+      {products?.map((item) => {
+        const isInWishlist = wishlist?.data?.some(
+          (wishlistItem) => wishlistItem.id === item.id
+        );
+
         return (
           item.priceAfterDiscount && (
             <div
-              className="product-card shadow-xl  group bg-gray-100 rounded-xl overflow-hidden   lg:w-1/4 md:w-1/3 sm:w-full transition-all duration-300 "
+              className="product-card shadow-xl group bg-gray-100 rounded-xl overflow-hidden lg:w-1/4 md:w-1/3 sm:w-full transition-all duration-300"
               key={item.id}>
               <div className="card-img relative w-full h-[450px] overflow-hidden">
                 <button
+                  disabled={isInWishlist}
                   onClick={(e) => {
-                    userToken
-                      ? toast.success("Added to Fivorites", { duration: 4000, position: "top-center" })
-                      : toast.error("Please login first", { duration: 4000, position: "top-center" });
-                    e.currentTarget.innerHTML = '<i class="fa-solid fa-heart text-red-700"></i>';
+                    if (!userToken) {
+                      toast.error("Please login first", {
+                        duration: 4000,
+                        position: "top-center",
+                      });
+                      return;
+                    }
+                    addToWishList(item.id);
+                    getWishlist();
+                    e.currentTarget.innerHTML =
+                      '<i class="fa-solid fa-heart text-red-700"></i>';
                   }}
-                  className="absolute top-4 text-[25px] right-4 z-30">
-                  <i class="fa-regular fa-heart"></i>
+                  className={`absolute top-4 text-[25px] right-4 z-30 ${
+                    isInWishlist ? "text-red-700" : ""
+                  }`}>
+                  {isInWishlist ? (
+                    <i class="fa-solid fa-heart"></i>
+                  ) : (
+                    <i class="fa-regular fa-heart"></i>
+                  )}
                 </button>
+
                 {item.priceAfterDiscount && (
-                  <div className="bg-red-700 z-50 w-[125px] h-[40px] absolute top-[10px] left-[-35px] rotate-[-45deg]  flex justify-center items-center text-white">
+                  <div className="bg-red-700 z-50 w-[125px] h-[40px] absolute top-[10px] left-[-35px] rotate-[-45deg] flex justify-center items-center text-white">
                     Sale
                   </div>
                 )}
@@ -38,7 +62,9 @@ export default function Products({ products }) {
                   className=" w-full mx-auto h-full slider overflow-hidden"
                   navigation={false}
                   loop={true}>
-                  <img loading="lazy" src={item.imageCover} alt="image 1" />
+                  {!item.images && (
+                    <img loading="lazy" src={item.imageCover} alt="image 1" />
+                  )}
 
                   {item.images &&
                     item.images.map((image, index) => {
@@ -47,6 +73,7 @@ export default function Products({ products }) {
                           key={index}
                           loading="lazy"
                           src={image}
+                          className=" object-cover "
                           alt={`image ${index + 1}`}
                         />
                       );
@@ -82,7 +109,7 @@ export default function Products({ products }) {
                   )}
                   <button
                     onClick={() => {
-                      localStorage.getItem("userToken")
+                      userToken
                         ? addToCart(item.id)
                         : toast.error("Please login first", { duration: 4000 });
                     }}

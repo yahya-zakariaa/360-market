@@ -5,18 +5,16 @@ import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 
 export default function Cart() {
-  const { updateCart } = useContext(CartContext);
   const [loadingProducts, setLoadingProducts] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
-  const { removeFromCart } = useContext(CartContext);
-  const { getUserCart, userCart } = useContext(CartContext);
+  const { getUserCart, userCart, removeFromCart, updateCart } =
+    useContext(CartContext);
   async function handleUpdateItems(id, count) {
     setLoadingProducts((prev) => ({ ...prev, [id]: true }));
     setIsLoading(true);
     try {
       await updateCart(id, count);
-      await getUserCart();
     } catch (error) {
     } finally {
       setLoadingProducts((prev) => ({ ...prev, [id]: false }));
@@ -28,7 +26,6 @@ export default function Cart() {
     setIsRemoving((prev) => ({ ...prev, [id]: true }));
     try {
       await removeFromCart(id);
-      await getUserCart();
     } catch (error) {
     } finally {
       setIsRemoving((prev) => ({ ...prev, [id]: false }));
@@ -38,8 +35,16 @@ export default function Cart() {
 
   useEffect(() => {
     getUserCart();
-  }, []);
+  }, [removeFromCart, updateCart]);
 
+    if (userCart.numOfCartItems < 1) {
+      return(
+        <div className="w-full h-screen flex justify-center items-center flex-col gap-10">
+        <h1 className="text-3xl font-bold text-gray-500">Your cart is empty</h1>
+        <Link to="/" className="text-[18px] font-bold text-white bg-black rounded-md px-4 py-2">Shop now </Link>
+      </div>
+      )
+    }
   if (!userCart || userCart.length < 1) {
     return (
       <div className="w-full h-screen flex items-center justify-center ">
@@ -48,18 +53,12 @@ export default function Cart() {
     );
   }
 
+
   return (
     <div className="relative overflow-x-auto lg:h-screen flex lg:pt-[56px] pt-[100px] flex-col lg:flex-row">
-      {userCart.numOfCartItems < 1 ? (
-        <div className="text-center text-[20px] font-bold w-full lg:w-[80%] flex items-center h-32 mt-10 justify-end flex-col ">
-          <h1 className="text-[25px] mb-5 text-gray-800 ">
-            Your cart is empty
-          </h1>
-          <Link to={"/"} className="bg-black px-4 py-2 rounded-md text-white">
-            Go shop
-          </Link>
-        </div>
-      ) : (
+      
+       
+    
         <table className="lg:w-[80%] w-full text-sm text-left rtl:text-right text-gray-500 shadow-md px-6 overflow-hidden">
           <thead className="text-xs text-black border-b border-gray-200 uppercase bg-white">
             <tr>
@@ -181,8 +180,8 @@ export default function Cart() {
                     ) : (
                       <button
                         onClick={() => handleRemoveItems(cartItem.product.id)}
-                        className="font-medium bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-800 text-[17px]">
-                        Remove
+                        className="text-red-800 text-[18px] lg:text-[24px] font-bold">
+                       <i class="fa-solid fa-trash-can"></i>
                       </button>
                     )}
                   </td>
@@ -190,7 +189,7 @@ export default function Cart() {
               ))}
           </tbody>
         </table>
-      )}
+      
       <div className="lg:border-l lg:border-gray-400 info w-full lg:mt-0 lg:w-[21%] h-[400px] border-t mt-10 border-gray-500 py-6 lg:h-screen bg-white  lg:fixed lg:top-[55px] lg:right-0 flex flex-col justify-between items-center lg:pb-20 lg:pt-10">
         <div className="cart-info w-full px-4">
           <h3 className="text-[25px] font-bold text-center mb-11">
