@@ -7,19 +7,55 @@ import { CartContext } from "../../Context/CartContext";
 import { WishlistContext } from "../../Context/Wishlist";
 
 export default function Products({ products }) {
-  const { addToCart } = useContext(CartContext);
+  const { addToCart, userCart, getUserCart } = useContext(CartContext);
   const { userToken } = useContext(UserContext);
   const { addToWishList, wishlist, getWishlist } = useContext(WishlistContext);
 
+  //  handel get user cart && wishlist if have token
   localStorage.getItem("userToken") &&
     useEffect(() => {
       getWishlist();
+      getUserCart();
     }, []);
+
+  // handel add to cart
+  async function HandelAddToCart(productId) {
+    if (userToken) {
+      await addToCart(productId).then(() => {
+        getUserCart().then(() => {
+          toast.success("Added to cart", {
+            position: "top-center",
+          });
+        });
+      });
+    } else {
+      toast.error("Please login first", { duration: 4000 });
+    }
+  }
+
+  // handel add to wishlist
+  async function HandelAddToWishList(id) {
+    if (userToken) {
+      await addToWishList(id).then(() => {
+        getWishlist().then(() => {
+          toast.success("Added to wishlist", {
+            position: "top-center",
+          });
+        });
+      });
+    } else {
+      toast.error("Please login first", { duration: 4000 });
+    }
+  }
+
   return (
     <>
       {products?.map((item) => {
         const isInWishlist = wishlist?.data?.some(
           (wishlistItem) => wishlistItem.id === item.id
+        );
+        const isInCart = userCart?.data?.products?.some(
+          (cartItem) => cartItem.product.id === item.id
         );
 
         return (
@@ -31,17 +67,8 @@ export default function Products({ products }) {
                 <button
                   disabled={isInWishlist}
                   onClick={(e) => {
-                    if (!userToken) {
-                      toast.error("Please login first", {
-                        duration: 4000,
-                        position: "top-center",
-                      });
-                      return;
-                    }
-                    addToWishList(item.id);
-                    getWishlist();
-                    e.currentTarget.innerHTML =
-                      '<i class="fa-solid fa-heart text-red-700"></i>';
+                    HandelAddToWishList(item.id);
+                    e.stopPropagation();
                   }}
                   className={`absolute top-4 text-[25px] right-4 z-30 ${
                     isInWishlist ? "text-red-700" : ""
@@ -108,13 +135,17 @@ export default function Products({ products }) {
                     <p>${item.price}</p>
                   )}
                   <button
-                    onClick={() => {
-                      userToken
-                        ? addToCart(item.id)
-                        : toast.error("Please login first", { duration: 4000 });
+                    disabled={isInCart}
+                    onClick={(e) => {
+                      HandelAddToCart(item.id);
+                      e.stopPropagation();
                     }}
                     className="  text-[35px] mr-4   flex justify-center items-center">
-                    <i class="fa-solid fa-circle-plus"></i>
+                    {isInCart ? (
+                      <i class="fa-solid fa-circle-check"></i>
+                    ) : (
+                      <i class="fa-solid fa-circle-plus"></i>
+                    )}
                   </button>
                 </div>
               </div>

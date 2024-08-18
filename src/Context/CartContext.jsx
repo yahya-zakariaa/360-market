@@ -36,9 +36,6 @@ export default function CartProvider({ children }) {
         }
       )
       .then((response) => {
-        getUserCart();
-
-        toast.success(response.data.message, { position: "top-center" });
       })
       .catch((error) => {
         toast.error(error.response.data.message, { position: "top-center" });

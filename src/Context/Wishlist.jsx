@@ -20,11 +20,7 @@ export default function WishlistProvider({ children }) {
           },
         }
       )
-      .then((response) => {
-        toast.success(" Product added to wishlist ", {
-          position: "top-center",
-        });
-      })
+      .then((response) => {})
       .catch((error) => {
         toast.error(error.response.data.message, { position: "top-center" });
       });
@@ -41,7 +37,6 @@ export default function WishlistProvider({ children }) {
         })
         .then((response) => {
           setWishlist(response.data);
-          console.log(response.data);
         })
         .catch((error) => {
           toast.error(error.response.data.message, { position: "top-center" });
@@ -57,12 +52,7 @@ export default function WishlistProvider({ children }) {
             token: JSON.parse(localStorage.getItem("userToken")),
           },
         })
-        .then((response) => {
-          toast.success(" Product removed from wishlist ", {
-            position: "top-center",
-          });
-          getWishlist();
-        })
+        .then((response) => {})
         .catch((error) => {
           toast.error(error.response.data.message, { position: "top-center" });
         });

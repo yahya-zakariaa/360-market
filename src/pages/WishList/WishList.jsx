@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { WishlistContext } from "../../Context/Wishlist";
 import { CartContext } from "../../Context/CartContext";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function WishList() {
   const { wishlist, getWishlist, removeFormWishList } =
@@ -9,6 +10,7 @@ export default function WishList() {
   const { addToCart, userCart, getUserCart } = useContext(CartContext);
   const [selectedOption, setSelectedOption] = useState("text");
   const [filteredData, setFilteredData] = useState([]);
+  const [isRemoveing, setIsRemoveing] = useState(false);
   useEffect(() => {
     getWishlist();
     getUserCart();
@@ -39,6 +41,21 @@ export default function WishList() {
       );
     }
   }
+
+  // handel remove from wishlist
+  async function handelRemoveFromWishList(id) {
+    setIsRemoveing((prev) => ({ ...prev, [id]: true }));
+    try {
+      await removeFormWishList(id).then(() => {
+        getWishlist();
+      });
+    } catch (error) {
+    } finally {
+      toast.success("Removed from wishlist", { position: "top-center" });
+      setIsRemoveing(false);
+    }
+  }
+  // handel data is loading
   if (!wishlist?.data) {
     return (
       <div className="w-full h-screen flex items-center justify-center ">
@@ -46,6 +63,7 @@ export default function WishList() {
       </div>
     );
   }
+  // handel wishlist is empty
   if (wishlist?.count === 0) {
     return (
       <div className="w-full h-screen flex justify-center items-center flex-col gap-10">
@@ -124,9 +142,17 @@ export default function WishList() {
                   </td>
                   <td className="px-6 py-4 ">
                     <button
-                      onClick={() => removeFormWishList(item.id)}
-                      className="text-red-800 text-[18px] lg:text-[24px] font-bold">
-                      <i class="fa-solid fa-trash-can"></i>
+                      onClick={() => handelRemoveFromWishList(item.id)}
+                      className={
+                        isRemoveing[item.id]
+                          ? "text-black text-[18px] lg:text-[24px] font-bold"
+                          : "text-red-800 text-[18px] lg:text-[24px] font-bold"
+                      }>
+                      {isRemoveing[item.id] ? (
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                      ) : (
+                        <i class="fa-solid fa-trash-can"></i>
+                      )}
                     </button>
                   </td>
                   <td className="px-6 py-4 ">
@@ -189,9 +215,17 @@ export default function WishList() {
                   </td>
                   <td className="px-6 py-4 ">
                     <button
-                      onClick={() => removeFormWishList(item.id)}
-                      className="text-red-800 text-[18px] lg:text-[24px] font-bold">
-                      <i class="fa-solid fa-trash-can"></i>
+                      onClick={() => handelRemoveFromWishList(item.id)}
+                      className={
+                        isRemoveing[item.id]
+                          ? "text-black text-[18px] lg:text-[24px] font-bold"
+                          : "text-red-800 text-[18px] lg:text-[24px] font-bold"
+                      }>
+                      {isRemoveing[item.id] ? (
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                      ) : (
+                        <i class="fa-solid fa-trash-can"></i>
+                      )}
                     </button>
                   </td>
                   <td className="px-6 py-4 ">

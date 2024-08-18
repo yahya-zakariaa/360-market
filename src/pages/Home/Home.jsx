@@ -6,7 +6,7 @@ import Products from "../../components/Products-layout/Products";
 export default function Home({ categories, popularProducts }) {
   return (
     <>
-      <div id="homePage" className="w-full h-screen">
+      <div id="homePage" className="w-full h-screen lg:p-0 pt-12">
         <div
           id="homeSec"
           className="home-section flex justify-center items-center w-full h-fit lg:h-screen md:h-screen">
