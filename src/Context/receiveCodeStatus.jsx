@@ -1,21 +1,15 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState } from "react";
 
-// إنشاء السياق
-export let isReceiveCodeContext = createContext();
+export const isReceiveCodeContext = createContext();
 
-// توفير السياق
-export default function IsReceiveCodeProvider  ({ children })  {
+export default function IsReceiveCodeProvider({ children }) {
   const [isReceiveCode, setIsReceiveCode] = useState(false);
-  const [userEmail, setUserEmail] = useState('');
-
-
+  const [userEmail, setUserEmail] = useState("");
 
   return (
-    <isReceiveCodeContext.Provider value={{ isReceiveCode, setIsReceiveCode , userEmail, setUserEmail}}>
+    <isReceiveCodeContext.Provider
+      value={{ isReceiveCode, setIsReceiveCode, userEmail, setUserEmail }}>
       {children}
     </isReceiveCodeContext.Provider>
-
-
   );
-};
-
+}

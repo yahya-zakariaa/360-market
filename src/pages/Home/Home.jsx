@@ -3,7 +3,7 @@ import Slider from "../../components/Slider/Slider";
 import "./home.css";
 import Products from "../../components/Products-layout/Products";
 
-export default function Home({ categories, popularProducts }) {
+export default function Home({ categories }) {
   return (
     <>
       <div id="homePage" className="w-full h-screen lg:p-0 pt-12">
@@ -19,15 +19,9 @@ export default function Home({ categories, popularProducts }) {
             </h2>
           </div>
 
-          <div className="container mx-auto h-full flex flex-col items-center  pt-12 lg:px-0 md:px-0 sm:px-10 px-7">
-            <div className="product flex-wrap flex gap-14 justify-center mb-12">
-              {popularProducts == "" ? (
-                <div className="w-full h-[300px] flex items-center justify-center  ">
-                  <i className="fas fa-spinner fa-spin fa-3x"></i>
-                </div>
-              ) : (
-                <Products products={popularProducts} />
-              )}
+          <div className="container mx-auto h-full w-full flex flex-col items-center  pt-12 lg:px-0 px-5">
+            <div className="product flex-wrap flex  gap-y-16 justify-center mb-12 w-full">
+              <Products />
             </div>
 
             <button className="goToProducts flex items-center gap-2 z-50 px-1 pb-[2px] my-2 text-center font-bold border-b-2 border-black">

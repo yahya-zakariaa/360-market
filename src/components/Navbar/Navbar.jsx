@@ -29,8 +29,8 @@ export default function Navbar() {
     <>
       <nav
         id="navbar"
-        className="w-full px-9 lg:px-16 md:px-16 bg-gray-100 py-1 flex fixed top-0 z-[99999] transition-all duration-700 ">
-        <div className=" py-2 flex justify-between w-full">
+        className="w-full  px-9 lg:px-16 md:px-16 bg-gray-100 py-1 flex lg:flex-col relative top-0 z-[99999] transition-all duration-700 ">
+        <div className=" pt-3 pb-5 flex justify-between w-full">
           <Link
             href="#"
             className="flex items-center gap-2 font-semibold justify-center"
@@ -38,6 +38,39 @@ export default function Navbar() {
             <i class="fa-solid fa-circle-nodes text-[30px]"></i>
             <span className="text-black text-[20px]">360 Market</span>
           </Link>
+          <div className="searchBar flex-grow flex justify-center">
+            <input className="px-4 py-2 w-[50%] rounded-full outline-none border  border-gray-400" type="text" placeholder="Search for products " />
+          </div>
+          <div className="nav-actions flex gap-10 items-center  ">
+            <Badge
+              className=" mt-[-2px] me-[-8px] text-[12px] w-[1px] h-[1px] bg-gray-100 text-black"
+              content={wishlist?.count}>
+              <Link
+                to={"/wishlist"}
+                className="nav-link text-black mt-[2px] text-[24px]  nav-wishlist flex items-center">
+                <i class="fa-solid fa-heart"></i>
+              </Link>
+            </Badge>
+            <Badge
+              className=" mt-[-2px] me-[-8px] text-[12px] w-[1px] h-[1px] bg-gray-100 text-black"
+              content={userCart?.data?.products?.reduce(
+                (a, b) => a + b.count,
+                0
+              )}>
+              <Link
+                to={"/cart"}
+                className="nav-link text-black mt-[2px] text-[24px]  nav-wishlist flex items-center">
+                <i class="fa-solid fa-bag-shopping"></i>
+              </Link>
+            </Badge>
+            <button
+              onClick={() => setToggle(!toggle)}
+              className="nav-toggle text-black  items-center flex me-2 text-[25px]  ">
+              <i class="fa-solid fa-bars"></i>
+            </button>
+          </div>
+        </div>
+        <div className="nav-links py-4 border-t border-gray-300 hidden lg:flex  justify-center items-center">
           <ul className=" justify-start items-center w-fit gap-16 hidden lg:flex md:flex">
             <li className="nav-item">
               <Link href="#" className="nav-link text-black" to={"/"}>
@@ -67,35 +100,6 @@ export default function Navbar() {
               </Link>
             </li>
           </ul>
-
-          <div className="nav-actions flex gap-10 items-center  ">
-            <Badge
-              className=" mt-[-2px] me-[-8px] text-[12px] w-[1px] h-[1px] bg-gray-100 text-black"
-              content={wishlist?.count}>
-              <Link
-                to={"/wishlist"}
-                className="nav-link text-black mt-[2px] text-[24px]  nav-wishlist flex items-center">
-                <i class="fa-solid fa-heart"></i>
-              </Link>
-            </Badge>
-            <Badge
-              className=" mt-[-2px] me-[-8px] text-[12px] w-[1px] h-[1px] bg-gray-100 text-black"
-              content={userCart?.data?.products?.reduce(
-                (a, b) => a + b.count,
-                0
-              )}>
-              <Link
-                to={"/cart"}
-                className="nav-link text-black mt-[2px] text-[24px]  nav-wishlist flex items-center">
-                <i class="fa-solid fa-bag-shopping"></i>
-              </Link>
-            </Badge>
-            <button
-              onClick={() => setToggle(!toggle)}
-              className="nav-toggle text-black  items-center flex me-2 text-[25px]  ">
-              <i class="fa-solid fa-bars"></i>
-            </button>
-          </div>
         </div>
       </nav>
       <aside

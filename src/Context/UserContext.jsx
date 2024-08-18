@@ -1,6 +1,6 @@
 import { createContext, useState } from "react";
 
-export let UserContext = createContext();
+export const UserContext = createContext();
 
 export default function UserContextProvider({ children }) {
   const [userToken, setUserToken] = useState(

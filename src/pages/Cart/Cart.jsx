@@ -55,7 +55,7 @@ export default function Cart() {
 
 
   return (
-    <div className="relative overflow-x-auto lg:h-screen flex lg:pt-[56px] pt-[100px] flex-col lg:flex-row">
+    <div className="relative overflow-x-auto  flex lg:pt-[56px] pt-[100px] flex-col lg:flex-row">
       
        
     

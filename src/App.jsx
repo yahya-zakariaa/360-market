@@ -9,12 +9,13 @@ import ForgetPassword from "./pages/Authentication/ForgetPassword/ForgetPassword
 import Auth from "./pages/Authentication/Auth-Layout/Auth";
 import { isReceiveCodeContext } from "./Context/receiveCodeStatus";
 import ResetPassword from "./pages/Authentication/ForgetPassword/ResetPassword/ResetPassword";
-import { Toaster } from "react-hot-toast";
 import UserContextProvider from "./Context/UserContext";
 import ProductDetails from "./pages/ProductDetails/ProductDetails";
 import Cart from "./pages/Cart/Cart";
 import ProtectedRoute from "./pages/ProtectedRoute/ProtectedRoute";
 import WishList from "./pages/WishList/WishList";
+import "react-loading-skeleton/dist/skeleton.css";
+
 function App() {
   const [categories, setCategories] = useState([]);
   const [popularProducts, setPopularProducts] = useState([]);
@@ -27,25 +28,11 @@ function App() {
         setCategories(response.data.data);
       })
       .catch((error) => {});
-
-    axios
-      .get(
-        "https://ecommerce.routemisr.com/api/v1/products?category[in]=6439d5b90049ad0b52b90048&limit=10"
-      )
-      .then((response) => {
-        setPopularProducts(response.data.data);
-        console.log("Popular products:", response.data);
-      })
-      .catch((error) => {});
   }, []);
 
   return (
     <>
       <Router>
-        <Toaster
-          position="top-center"
-          containerStyle={{ zIndex: 9999, top: 80 } }
-        />
         <Routes>
           <Route element={<Layout />} path="/">
             <Route

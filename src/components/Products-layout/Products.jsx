@@ -1,22 +1,52 @@
 import { Carousel } from "@material-tailwind/react";
-import React, { useContext, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { UserContext } from "../../Context/UserContext";
+import React, { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import Skeleton from "react-loading-skeleton";
+import { Link } from "react-router-dom";
 import { CartContext } from "../../Context/CartContext";
+import { ProductsContext } from "../../Context/productsContext";
+import { UserContext } from "../../Context/UserContext";
 import { WishlistContext } from "../../Context/Wishlist";
 
-export default function Products({ products }) {
+export default function Products() {
   const { addToCart, userCart, getUserCart } = useContext(CartContext);
   const { userToken } = useContext(UserContext);
   const { addToWishList, wishlist, getWishlist } = useContext(WishlistContext);
+  const { getHomeProducts, homeProducts } = useContext(ProductsContext);
+  const [isLoading, setIsLoading] = useState(true);
+  const [imageLoading, setImageLoading] = useState(true);
 
   //  handel get user cart && wishlist if have token
+  async function getWishlistAndCart() {
+    setIsLoading(true);
+    try {
+      await getWishlist();
+      await getUserCart();
+    } catch (error) {
+    } finally {
+      setIsLoading(false);
+    }
+  }
   localStorage.getItem("userToken") &&
+    // get products will component mount
     useEffect(() => {
-      getWishlist();
-      getUserCart();
+      getWishlistAndCart();
     }, []);
+  // handel get products
+  async function getProducts() {
+    try {
+      await getHomeProducts();
+    } catch (error) {
+    } finally {
+      setIsLoading(false);
+    }
+  }
+  // get products will component mount
+  useEffect(() => {
+    getProducts();
+  }, []);
+
+  console.log(homeProducts);
 
   // handel add to cart
   async function HandelAddToCart(productId) {
@@ -48,9 +78,38 @@ export default function Products({ products }) {
     }
   }
 
+  // handel request is loading
+  if (isLoading) {
+    return (
+      <>
+        {Array(9)
+          .fill(0)
+          .map((item) => (
+            <div className="product-container px-5 lg:w-1/3 md:w-1/2 sm:w-full">
+              <div className="product-card shadow-xl group w-[400px] bg-gray-100 rounded-xl overflow-hiddentransition-all duration-300">
+                <div className="card-img relative w-full p-0 h-[450px] overflow-hidden">
+                  <Skeleton height={"100%"} width={"100%"} />
+                </div>
+                <div className="card-body px-3 py-5 h-[180px]">
+                  <Skeleton height={10} width={100} count={2} />
+                  <div className="product-rateing my-[3px]">
+                    <Skeleton width={100} />
+                  </div>
+                  <div className="card-footer flex justify-between items-center">
+                    <Skeleton width={100} height={30} />
+                    <Skeleton circle width={50} height={50} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+      </>
+    );
+  }
+
   return (
     <>
-      {products?.map((item) => {
+      {homeProducts.map((item) => {
         const isInWishlist = wishlist?.data?.some(
           (wishlistItem) => wishlistItem.id === item.id
         );
@@ -59,11 +118,11 @@ export default function Products({ products }) {
         );
 
         return (
-          item.priceAfterDiscount && (
+          <div className="card-container px-5 lg:w-1/3 md:w-1/2 sm:w-full">
             <div
-              className="product-card shadow-xl group bg-gray-100 rounded-xl overflow-hidden lg:w-1/4 md:w-1/3 sm:w-full transition-all duration-300"
+              className="product-card shadow-xl group bg-gray-100 rounded-xl overflow-hidden w-full  transition-all duration-300"
               key={item.id}>
-              <div className="card-img relative w-full h-[450px] overflow-hidden">
+              <div className="card-img relative flex items-center justify-center w-full p-0 h-[450px] overflow-hidden">
                 <button
                   disabled={isInWishlist}
                   onClick={(e) => {
@@ -85,27 +144,35 @@ export default function Products({ products }) {
                     Sale
                   </div>
                 )}
-                <Carousel
-                  className=" w-full mx-auto h-full slider overflow-hidden"
-                  navigation={false}
-                  loop={true}>
-                  {!item.images && (
-                    <img loading="lazy" src={item.imageCover} alt="image 1" />
-                  )}
-
-                  {item.images &&
-                    item.images.map((image, index) => {
-                      return (
-                        <img
-                          key={index}
-                          loading="lazy"
-                          src={image}
-                          className=" object-cover "
-                          alt={`image ${index + 1}`}
-                        />
-                      );
-                    })}
-                </Carousel>
+                {imageLoading[item?.id] ? (
+                  <Skeleton width={430} height={450} />
+                ) : (
+                  <Carousel
+                    className="w-full mx-auto h-full slider overflow-hidden"
+                    navigation={false}
+                    loop={true}>
+                    {item.images.map((image, index) => (
+                      <img
+                        key={index}
+                        src={image}
+                        onLoad={() =>
+                          setImageLoading((prev) => ({
+                            ...prev,
+                            [item.id]: false,
+                          }))
+                        }
+                        onError={() =>
+                          setImageLoading((prev) => ({
+                            ...prev,
+                            [item.id]: false,
+                          }))
+                        }
+                        className="object-cover w-full h-full"
+                        alt={`image ${index + 1}`}
+                      />
+                    ))}
+                  </Carousel>
+                )}
               </div>
               <div className="card-body px-3 py-5 h-[180px]">
                 <h2 className="card-category mb-1 hover:underline text-blue-700 ">
@@ -113,7 +180,11 @@ export default function Products({ products }) {
                 </h2>
                 <Link to={`/product/${item.id}`}>
                   <h2 className="card-title mb-1 hover:underline">
-                    {item.title.split(" ").slice(0, 4).join(" ")}
+                    {item.title ? (
+                      item.title.split(" ").slice(0, 4).join(" ")
+                    ) : (
+                      <Skeleton width={200} />
+                    )}
                   </h2>
                 </Link>
                 <div className="product-rateing my-[3px]">
@@ -150,7 +221,7 @@ export default function Products({ products }) {
                 </div>
               </div>
             </div>
-          )
+          </div>
         );
       })}
     </>
