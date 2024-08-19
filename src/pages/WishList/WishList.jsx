@@ -185,9 +185,9 @@ export default function WishList() {
                       />
                     }
                   </td>
-                  <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white text-[17px] relative">
+                  <td className="lg:px-6 py-4 font-semibold text-gray-900 dark:text-white text-[17px] relative">
                     {item.priceAfterDiscount && (
-                      <p className="text-[14px] lg:text-[18px] absolute left-[0%] top-[20px] lg:top-[55px] font-bold  text-red-800 px-2 py-1 rounded-tl-md">
+                      <p className="text-[14px] lg:text-[18px] absolute left-[-7px] lg:left-[0%] top-[5px] lg:top-[55px] font-bold  text-red-800 px-2 py-1 rounded-tl-md">
                         sale
                       </p>
                     )}
@@ -236,7 +236,7 @@ export default function WishList() {
                       {isAddingToCart[item.id] ? ( // render the spinner if the state is true
                         <i className="fa-solid fa-spinner fa-spin"></i>
                       ) : isInCart ? ( // check if item is in cart && render the icon based on the state
-                        <i class="fa-solid fa-circle-check text-[24px]"></i>
+                        <i class="fa-solid fa-circle-check lg:text-[24px]"></i>
                       ) : (
                         <i class="fa-solid fa-cart-plus"></i>
                       )}

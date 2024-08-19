@@ -17,7 +17,7 @@ export default function Home() {
   );
   return (
     <>
-      <div id="homePage" className="w-full h-screen pt-36 ">
+      <div id="homePage" className="w-full h-screen lg:pt-36 pt-20 ">
         <div
           id="homeSec"
           className="home-section flex justify-center items-center w-full  lg:h-screen ">
