@@ -1,61 +1,63 @@
-import React from "react";
-import Slider from "../../components/Slider/Slider";
+import React, { lazy, Suspense } from "react";
 import "./home.css";
-import Products from "../../components/Products-layout/Products";
+import "@splidejs/react-splide/css";
+import SkeltonCategories from "../../components/categories/SkeltonCategories";
+import SkeltonProducts from "../../components/Products-layout/SkeltonProducts";
+import SekltonHeroSection from "../../components/HeroSection/SekltonHeroSection";
 
-export default function Home({ categories }) {
+export default function Home() {
+  const Categories = React.lazy(() =>
+    import("../../components/categories/Categories")
+  );
+  const Products = React.lazy(() =>
+    import("../../components/Products-layout/Products")
+  );
+  const HeroSection = React.lazy(() =>
+    import("../../components/HeroSection/HeroSction")
+  );
   return (
     <>
-      <div id="homePage" className="w-full h-screen lg:p-0 pt-12">
+      <div id="homePage" className="w-full h-screen pt-36 ">
         <div
           id="homeSec"
-          className="home-section flex justify-center items-center w-full h-fit lg:h-screen md:h-screen">
-          <Slider />
+          className="home-section flex justify-center items-center w-full  lg:h-screen ">
+          <Suspense fallback={<SekltonHeroSection />}>
+            <HeroSection />
+          </Suspense>
+        </div>
+        <div
+          id="CategoriesSec"
+          className="Categories h-fit pt-14 bg-gray-900  ">
+          <div className="category-title flex justify-center">
+            <h2 className="text-5xl font-bold text-center text-white   inline-block ">
+              Categories
+            </h2>
+          </div>
+          <div className="container mx-auto h-full   pb-10 px-2">
+            <Suspense fallback={<SkeltonCategories />}>
+              <Categories />
+            </Suspense>
+          </div>
         </div>
         <div id="ProductsSec" className="Products py-16 ">
-          <div className="category-title flex justify-center">
-            <h2 className="text-4xl font-bold text-center text-black border-b-4 pb-3 md: border-black inline-block ">
-              Men's Clothing Deals
-            </h2>
+          <div className="category-title flex justify-start w-full">
+            <div className=" container mx-auto h-full w-full lg:px-7 px-5">
+              <h2 className="text-2xl font-bold  text-black   inline-block ">
+                Special Deals
+              </h2>
+            </div>
           </div>
 
           <div className="container mx-auto h-full w-full flex flex-col items-center  pt-12 lg:px-0 px-5">
             <div className="product flex-wrap flex  gap-y-16 justify-center mb-12 w-full">
-              <Products />
+              <Suspense fallback={<SkeltonProducts />}>
+                <Products />
+              </Suspense>
             </div>
 
-            <button className="goToProducts flex items-center gap-2 z-50 px-1 pb-[2px] my-2 text-center font-bold border-b-2 border-black">
-              Go to Shop <i class="fa-solid fa-angle-right mt-[3.3px]"></i>
+            <button className="goToProducts flex items-center gap-2 z-50  pb-[1px] my-2 text-center border-b-2 font-bold  border-black">
+              See All Offers <i class="fa-solid fa-angle-right mt-[3.1px]"></i>
             </button>
-          </div>
-        </div>
-        <div id="CategoriesSec" className="Categories h-fit pt-12 bg-gray-600 ">
-          <div className="category-title flex justify-center">
-            <h2 className="text-4xl font-bold text-center text-white border-b-4 pb-3 border-white inline-block ">
-              Categories
-            </h2>
-          </div>
-          <div className="container mx-auto h-full  flex-wrap flex gap-10 lg:gap-5 justify-center py-12 px-7 lg:px-0 md:px-7 sm:px-10">
-            {categories.map((item) => {
-              return (
-                <button
-                  className="card hover:scale-[0.98]  transtion-all duration-300 lg:w-1/6 md:w-1/3 sm:w-full lg:h-56 h-64 bg-blue-gray-500 rounded-xl overflow-hidden relative flex justify-center items-center"
-                  key={item.id}>
-                  <div className="w-full h-full bg-black opacity-40 absolute top-0 left-0 flex justify-center items-center"></div>
-                  <div className="w-full h-full  z-50 absolute top-0 left-0 flex justify-center items-center">
-                    <h2 className="text-xl  font-bold text-white">
-                      {item.name}
-                    </h2>
-                  </div>
-                  <img
-                    loading="lazy"
-                    src={item.image}
-                    alt="category img"
-                    className="w-full h-full"
-                  />
-                </button>
-              );
-            })}
           </div>
         </div>
       </div>

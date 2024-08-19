@@ -29,7 +29,7 @@ export default function Navbar() {
     <>
       <nav
         id="navbar"
-        className="w-full  px-9 lg:px-16 md:px-16 bg-gray-100 py-1 flex lg:flex-col relative top-0 z-[99999] transition-all duration-700 ">
+        className="w-full fixed  px-9 lg:px-16 md:px-16 bg-gray-100 py-1 flex lg:flex-col  top-0 z-[99999] transition-all duration-700 ">
         <div className=" pt-3 pb-5 flex justify-between w-full">
           <Link
             href="#"
@@ -38,8 +38,9 @@ export default function Navbar() {
             <i class="fa-solid fa-circle-nodes text-[30px]"></i>
             <span className="text-black text-[20px]">360 Market</span>
           </Link>
-          <div className="searchBar flex-grow flex justify-center">
-            <input className="px-4 py-2 w-[50%] rounded-full outline-none border  border-gray-400" type="text" placeholder="Search for products " />
+          <div className="searchBar flex-grow  justify-center relative hidden lg:flex">
+            <input className="px-4 py-3 w-[50%] rounded-full outline-none border  border-gray-400" type="text" placeholder="Search for products " />
+            <button className="bg-black text-white px-4 py-2 top-[10%] right-[25.6%] absolute rounded-full"><i class="fa-solid fa-magnifying-glass"></i> search</button>
           </div>
           <div className="nav-actions flex gap-10 items-center  ">
             <Badge
@@ -71,15 +72,15 @@ export default function Navbar() {
           </div>
         </div>
         <div className="nav-links py-4 border-t border-gray-300 hidden lg:flex  justify-center items-center">
-          <ul className=" justify-start items-center w-fit gap-16 hidden lg:flex md:flex">
+          <ul className=" justify-start items-center w-fit gap-[50px] hidden lg:flex md:flex">
             <li className="nav-item">
               <Link href="#" className="nav-link text-black" to={"/"}>
                 Home
               </Link>
             </li>
             <li className="nav-item">
-              <Link href="#" className="nav-link text-black ">
-                Producets
+              <Link to={"/shop"} className="nav-link text-black ">
+                Shop
               </Link>
             </li>
             <li className="nav-item">
@@ -105,10 +106,11 @@ export default function Navbar() {
       <aside
         className={
           toggle
-            ? "w-[40%] h-screen lg:w-[20%] pb-10  lg:h-screen fixed top-[55px] right-0 transition-all duration-700 bg-gray-100 z-[9999]"
-            : "w-[40%] h-screen lg:w-[20%] pb-10  lg:h-screen fixed top-[55px] right-[-50%] transition-all duration-700 bg-gray-100 z-[9999]"
+            ? "w-[40%] h-screen border-l border-gray-500 lg:w-[20%] pb-8  lg:h-screen fixed top-[0px] right-0 transition-all duration-700 bg-gray-100 z-[999999]"
+            : "w-[40%] h-screen border-l border-gray-500 lg:w-[20%] pb-8  lg:h-screen fixed top-[0px] right-[-50%] transition-all duration-700 bg-gray-100 z-[999999]"
         }>
-        <div className=" flex flex-col justify-between items-center h-[90%] w-full">
+          <button onClick={() => setToggle(!toggle)} className="absolute top-[15px] left-[20px]"><i className="fa-solid fa-x"></i></button>
+        <div className=" flex flex-col justify-between items-center h-[100%] w-full pt-10">
           <ul className="flex flex-col items-center py-7 gap-3 w-full">
             <a
               href="#"

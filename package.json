@@ -12,6 +12,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.6.0",
     "@material-tailwind/react": "^2.1.9",
+    "@splidejs/react-splide": "^0.7.12",
     "autoprefixer": "^10.4.19",
     "axios": "^1.7.3",
     "flowbite": "^2.4.1",

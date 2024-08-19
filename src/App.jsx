@@ -1,5 +1,4 @@
-import { useState, useEffect, useContext } from "react";
-import axios from "axios";
+import { useContext } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./pages/Layout/Layout";
 import Home from "./pages/Home/Home";
@@ -9,43 +8,24 @@ import ForgetPassword from "./pages/Authentication/ForgetPassword/ForgetPassword
 import Auth from "./pages/Authentication/Auth-Layout/Auth";
 import { isReceiveCodeContext } from "./Context/receiveCodeStatus";
 import ResetPassword from "./pages/Authentication/ForgetPassword/ResetPassword/ResetPassword";
-import UserContextProvider from "./Context/UserContext";
 import ProductDetails from "./pages/ProductDetails/ProductDetails";
 import Cart from "./pages/Cart/Cart";
 import ProtectedRoute from "./pages/ProtectedRoute/ProtectedRoute";
 import WishList from "./pages/WishList/WishList";
 import "react-loading-skeleton/dist/skeleton.css";
+import Shop from "./pages/Shop/Shop";
 
 function App() {
-  const [categories, setCategories] = useState([]);
-  const [popularProducts, setPopularProducts] = useState([]);
   const receiveCodeStatus = useContext(isReceiveCodeContext);
-
-  useEffect(() => {
-    axios
-      .get("https://ecommerce.routemisr.com/api/v1/categories")
-      .then((response) => {
-        setCategories(response.data.data);
-      })
-      .catch((error) => {});
-  }, []);
 
   return (
     <>
       <Router>
         <Routes>
           <Route element={<Layout />} path="/">
-            <Route
-              element={
-                <Home
-                  categories={categories}
-                  popularProducts={popularProducts}
-                />
-              }
-              index={true}
-            />
+            <Route element={<Home />} index={true} />
 
-            <Route element={<Home />} path="/home"></Route>
+            <Route element={<Shop />} path="/shop"></Route>
             <Route
               element={
                 <ProtectedRoute>

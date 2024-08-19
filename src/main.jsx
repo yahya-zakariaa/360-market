@@ -10,25 +10,28 @@ import CartProvider, { CartContext } from "./Context/CartContext.jsx";
 import WishlistProvider from "./Context/Wishlist.jsx";
 import { Toaster } from "react-hot-toast";
 import ProductsProvider from "./Context/productsContext.jsx";
+import CategoriesProvider from "./Context/CategoriesContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <UserContextProvider>
-      <ProductsProvider>
-        <CartProvider>
-          <WishlistProvider>
-            <IsReceiveCodeProvider>
-              <ThemeProvider>
-                <Toaster
-                  position="top-center"
-                  containerStyle={{ zIndex: 9999, top: 80 }}
-                />
-                <App />
-              </ThemeProvider>
-            </IsReceiveCodeProvider>
-          </WishlistProvider>
-        </CartProvider>
-      </ProductsProvider>
+      <CategoriesProvider>
+        <ProductsProvider>
+          <CartProvider>
+            <WishlistProvider>
+              <IsReceiveCodeProvider>
+                <ThemeProvider>
+                  <Toaster
+                    position="top-center"
+                    containerStyle={{ zIndex: 9999, top: 80 }}
+                  />
+                  <App />
+                </ThemeProvider>
+              </IsReceiveCodeProvider>
+            </WishlistProvider>
+          </CartProvider>
+        </ProductsProvider>
+      </CategoriesProvider>
     </UserContextProvider>
   </React.StrictMode>
 );

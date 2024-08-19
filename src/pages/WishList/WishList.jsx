@@ -4,7 +4,7 @@ import { CartContext } from "../../Context/CartContext";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import Skeleton from "react-loading-skeleton";
-
+import WishListSkelton from "./WishListSkelton";
 
 export default function WishList() {
   const { wishlist, getWishlist, removeFormWishList } =
@@ -14,11 +14,21 @@ export default function WishList() {
   const [isRemoveing, setIsRemoveing] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   // get wishlist && cart data
+
+  async function GetData() {
+    setIsLoading(true);
+    try {
+      await getWishlist();
+      await getUserCart();
+    } catch (error) {
+    } finally {
+      setIsLoading(false);
+    }
+  }
   useEffect(() => {
-    getWishlist();
-    //get user cart to check if product is in cart or no
-    getUserCart();
+    GetData();
   }, []);
 
   useEffect(() => {
@@ -120,25 +130,32 @@ export default function WishList() {
     );
   }
 
+  // handel product is loading
+  if (isLoading) {
+    return <WishListSkelton />;
+  }
   return (
-    <div className="relative overflow-x-auto  flex  flex-col pb-3">
-      <div className="searchBar mx-auto w-full  flex items-center justify-center py-10 lg:py-12 border-b border-gray-300 ">
-        <input
-          type={selectedOption}
-          className="lg:w-[30%] w-[60%] h-[40px] border-t border-b border-l border-black rounded-l-full px-3 outline-none  [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-          placeholder={`Search ${
-            selectedOption == "text" ? "by name" : "by price"
-          }`}
-          onKeyUp={handleSearchInput}
-        />
-        <select
-          name=""
-          onChange={handleSearchChange}
-          value={selectedOption}
-          className="h-[40px] px-1   rounded-r-full outline-none border border-black text-[15px] cursor-pointer">
-          <option value="text">name</option>
-          <option value="number">price</option>
-        </select>
+    <div className="relative overflow-x-auto  flex  flex-col pb-3 pt-32">
+      <div className="wishListDetails w-full flex flex-col border-b border-gray-300">
+        <div className="searchBar mx-auto w-full  flex items-center justify-center py-10 lg:py-12  ">
+          <input
+            type={selectedOption}
+            className="lg:w-[30%] w-[60%] h-[40px] border-t border-b border-l border-black rounded-l-full px-3 outline-none  [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            placeholder={"Search In WishList "}
+            onKeyUp={handleSearchInput}
+          />
+          <select
+            name=""
+            onChange={handleSearchChange}
+            value={selectedOption}
+            className="h-[40px] px-1   rounded-r-full outline-none border border-black text-[15px] cursor-pointer">
+            <option value="text">By Name</option>
+            <option value="number">By Price</option>
+          </select>
+        </div>
+        <div className="wishlistCount px-10 pb-5">
+          <h3 className="text-[25px] font-bold">({wishlist?.count}) Items</h3>
+        </div>
       </div>
       {data?.length === 0 && (
         <div className="w-full flex items-center justify-center  py-20 ">
@@ -153,17 +170,20 @@ export default function WishList() {
               const isInCart = userCart?.data?.products.some(
                 (product) => product?.product.id === item.id
               );
+
               return (
                 <tr className="bg-white border-b overflow-hidden  hover:bg-gray-50 relative">
                   <td className="p-4">
-                    {  (
+                    {
                       <img
                         src={item?.imageCover}
                         alt={item?.title}
+                        decoding="async"
+                        fetchpriority="high"
                         loading="lazy"
                         className="w-16 md:w-32 max-w-full max-h-full rounded-md"
                       />
-                    )||<Skeleton height={"200px"} width={"200px"} />}
+                    }
                   </td>
                   <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white text-[17px] relative">
                     {item.priceAfterDiscount && (
@@ -173,7 +193,9 @@ export default function WishList() {
                     )}
                     <Link to={`/product/${item.id}`}>
                       <h4 className="card-title lg:text-[17px] text-[14px] mb-1 hover:underline">
-                        {item.title.split(" ").slice(0, 3).join(" ")|| <Skeleton height={20} width={200}/>}
+                        {item.title.split(" ").slice(0, 3).join(" ") || (
+                          <Skeleton height={20} width={200} />
+                        )}
                       </h4>
                     </Link>
                   </td>
