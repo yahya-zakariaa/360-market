@@ -173,7 +173,7 @@ export default function WishList() {
 
               return (
                 <tr className="bg-white border-b overflow-hidden  hover:bg-gray-50 relative">
-                  <td className="p-4">
+                  <td className="px-2 py-4">
                     {
                       <img
                         src={item?.imageCover}
@@ -185,33 +185,35 @@ export default function WishList() {
                       />
                     }
                   </td>
-                  <td className="lg:px-6 py-4 font-semibold text-gray-900 dark:text-white text-[17px] relative">
-                    {item.priceAfterDiscount && (
-                      <p className="text-[14px] lg:text-[18px] absolute left-[-7px] lg:left-[0%] top-[5px] lg:top-[55px] font-bold  text-red-800 px-2 py-1 rounded-tl-md">
-                        sale
-                      </p>
-                    )}
-                    <Link to={`/product/${item.id}`}>
-                      <h4 className="card-title lg:text-[17px] text-[14px] mb-1 hover:underline">
-                        {item.title.split(" ").slice(0, 3).join(" ") || (
-                          <Skeleton height={20} width={200} />
-                        )}
-                      </h4>
-                    </Link>
-                  </td>
-                  <td className="px-6 py-4 font-semibold text-gray-900 text-[14px] lg:text-[17px]">
-                    {item.priceAfterDiscount ? ( // check if item has discount && display (main price) and price after discount
-                      <div className="flex gap-2 relative">
-                        <h4 className="translate-y-[-3px] lg:text-[17px]">
-                          ${item.priceAfterDiscount}
+                  <td className=" py-3 font-semibold text-gray-900 dark:text-white text-[17px] relative">
+                    <div className="title mb-3">
+                      {item.priceAfterDiscount && (
+                        <p className="text-[14px] lg:text-[18px] absolute left-[-7px] lg:left-[0%] top-[5px] lg:top-[55px] font-bold  text-red-800 px-2 py-1 rounded-tl-md">
+                          sale
+                        </p>
+                      )}
+                      <Link to={`/product/${item.id}`}>
+                        <h4 className="card-title lg:text-[17px] text-[14px] mb-1 hover:underline">
+                          {item.title.split(" ").slice(0, 3).join(" ") || (
+                            <Skeleton height={20} width={200} />
+                          )}
                         </h4>
-                        <h4 className="text-gray-700 font-normal text-[12px] lg:text-[14px] line-through">
-                          ${item.price}
-                        </h4>
-                      </div>
-                    ) : (
-                      <h4>${item.price}</h4>
-                    )}
+                      </Link>
+                    </div>
+                    <div className="price">
+                      {item.priceAfterDiscount ? ( // check if item has discount && display (main price) and price after discount
+                        <div className="flex gap-2 relative">
+                          <h4 className="translate-y-[-3px] lg:text-[17px]">
+                            ${item.priceAfterDiscount}
+                          </h4>
+                          <h4 className="text-gray-700 font-normal text-[12px] lg:text-[14px] line-through">
+                            ${item.price}
+                          </h4>
+                        </div>
+                      ) : (
+                        <h4>${item.price}</h4>
+                      )}
+                    </div>
                   </td>
                   <td className="px-6 py-4 ">
                     <button

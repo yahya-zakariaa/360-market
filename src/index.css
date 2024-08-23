@@ -2,6 +2,10 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+body {
+  scroll-behavior: smooth;
+}
+
 .loader {
     transform: rotateZ(45deg);
     perspective: 1000px;

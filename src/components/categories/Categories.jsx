@@ -34,7 +34,7 @@ export default function Categories() {
       options={{
         rewind: true,
         gap: "10px",
-        perPage: 4,
+        perPage: 5,
         type: "loop",
         autoplay: true,
         interval: 3000,
@@ -65,7 +65,7 @@ export default function Categories() {
                 loading="lazy"
                 src={item.image}
                 alt="category img"
-                className="w-full h-full"
+                className="w-full h-full object-cover"
               />
             </button>
           </SplideSlide>

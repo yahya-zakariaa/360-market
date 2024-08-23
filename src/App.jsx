@@ -43,7 +43,7 @@ function App() {
               path="/wishlist"
             />
           </Route>
-          <Route element={<ProductDetails />} path="/product/:id" />
+          <Route element={<ProductDetails />} path="/product/:productId" />
           <Route element={<Auth />} path="/login">
             <Route element={<Login />} index={true} />
             <Route element={<ForgetPassword />} path="/login/forget-Password" />

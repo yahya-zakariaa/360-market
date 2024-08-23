@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { CartContext } from "../../Context/CartContext";
 import toast from "react-hot-toast";
@@ -6,31 +5,26 @@ import { Link } from "react-router-dom";
 
 export default function Cart() {
   const [loadingProducts, setLoadingProducts] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
   const { getUserCart, userCart, removeFromCart, updateCart } =
     useContext(CartContext);
   async function handleUpdateItems(id, count) {
     setLoadingProducts((prev) => ({ ...prev, [id]: true }));
-    setIsLoading(true);
     try {
-      await updateCart(id, count);
-    } catch (error) {
-    } finally {
-      setLoadingProducts((prev) => ({ ...prev, [id]: false }));
-      setIsLoading(false);
-    }
+      await updateCart(id, count).then(() => {
+        setLoadingProducts((prev) => ({ ...prev, [id]: false }));
+      });
+    } catch (error) {}
   }
 
   async function handleRemoveItems(id) {
     setIsRemoving((prev) => ({ ...prev, [id]: true }));
     try {
-      await removeFromCart(id);
-    } catch (error) {
-    } finally {
-      setIsRemoving((prev) => ({ ...prev, [id]: false }));
-      toast.success("removed from cart", { position: "top-center" });
-    }
+      await removeFromCart(id).then(() => {
+        setIsRemoving((prev) => ({ ...prev, [id]: false }));
+        toast.success("removed from cart", { position: "top-center" });
+      });
+    } catch (error) {}
   }
 
   useEffect(() => {
@@ -57,157 +51,178 @@ export default function Cart() {
     );
   }
 
+  
   return (
-    <div className="relative overflow-x-auto  flex pt-36  flex-col lg:flex-row">
-      <table className="lg:w-[80%] w-full text-sm text-left rtl:text-right text-gray-500 shadow-md px-6 overflow-hidden">
-        <tbody>
-          {userCart.data &&
-            userCart.numOfCartItems > 0 &&
-            userCart.data.products.map((cartItem) => (
-              <tr
-                className="bg-white border-b hover:bg-gray-50"
-                key={cartItem._id}>
-                <td className="p-4">
-                  <img
-                    src={cartItem.product.imageCover}
-                    className="w-16 md:w-32 max-w-full max-h-full"
-                    alt={cartItem.product.title}
-                  />
-                </td>
-                <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white text-[17px]">
-                  {cartItem.product.title.split(" ").slice(0, 3).join(" ")}
-                </td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center">
-                    <button
-                      className="inline-flex items-center justify-center p-1 me-3 text-sm font-medium h-6 w-6 text-gray-500 bg-white border border-gray-300 rounded-full focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-                      type="button"
-                      onClick={() => {
-                        handleUpdateItems(
-                          cartItem.product.id,
-                          cartItem.count - 1
-                        );
-                      }}>
-                      <span className="sr-only">Quantity button</span>
-                      <svg
-                        className="w-3 h-3"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 18 2">
-                        <path
-                          stroke="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M1 1h16"
-                        />
-                      </svg>
-                    </button>
-                    <div className="relative">
-                      {loadingProducts[cartItem.product.id] && (
-                        <div className="loading absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                          <i className="fas fa-spinner fa-spin text-black"></i>
-                        </div>
-                      )}
-                      <input
-                        type="number"
-                        id="first_product"
-                        className="bg-gray-50 w-14 ps-3 border border-gray-300 text-gray-900 text-sm rounded-lg block py-1 text-center"
-                        value={
-                          loadingProducts[cartItem.product.id]
-                            ? ""
-                            : cartItem.count
-                        }
-                        disabled={true}
-                        required
-                      />
-                    </div>
-                    <button
-                      className="inline-flex items-center justify-center h-6 w-6 p-1 ms-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-full focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-                      type="button"
-                      onClick={() => {
-                        handleUpdateItems(
-                          cartItem.product.id,
-                          cartItem.count + 1
-                        );
-                      }}>
-                      <span className="sr-only">Quantity button</span>
-                      <svg
-                        className="w-3 h-3"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 18 18">
-                        <path
-                          stroke="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 1v16M1 9h16"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </td>
-                <td className="px-6 py-4 font-semibold text-gray-900 text-[17px]">
-                  {loadingProducts[cartItem.product.id]
-                    ? "calculating..."
-                    : "$" + cartItem.price * cartItem.count}
-                </td>
-                <td className="px-6 py-4">
-                  {isRemoving[cartItem.product.id] ? (
-                    <i className="fas fa-spinner fa-spin fa-2x text-black ms-6"></i>
-                  ) : (
-                    <button
-                      onClick={() => handleRemoveItems(cartItem.product.id)}
-                      className="text-red-800 text-[18px] lg:text-[24px] font-bold">
-                      <i class="fa-solid fa-trash-can"></i>
-                    </button>
-                  )}
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
+    <section className=" w-full h-auto min-h-screen pt-40">
+      <div className="container mx-auto">
+        <div className="cart-title bg-black w-[92%] mb-14 py-3 mx-auto md:w-full flex items-center px-5 rounded-lg">
+          <h4 className="sm:text-[20px] text-[18px] font-medium text-white">
+            <span>{userCart.numOfCartItems}</span> Items
+          </h4>
 
-      <div className="info w-full lg:mt-0 lg:w-[19%] h-[550px]  mt-10 py-6  bg-white  lg:fixed bottom-0 lg:right-0 flex flex-col justify-between items-center lg:pb-5 lg:pt-10">
-        <div className="cart-info w-full px-4">
-          <h3 className="text-[25px] font-bold text-center mb-11">
-            Cart Details
+          <h3 className="sm:text-2xl text-xl font-bold text-white  mx-auto text-center">
+            Your Cart
           </h3>
-          <p className="text-[20px] font-simibold mb-2 pb-2 border-b flex justify-between pe-[1px] border-gray-200 lg:border-gray-200">
-            <span>Total items:</span>
-            <span>
-              {isLoading ? (
-                <i className="fas fa-spinner fa-spin"></i>
-              ) : (
-                userCart.data.products.reduce((a, b) => a + b.count, 0)
-              )}
-            </span>
-          </p>
-          <p className="text-[20px] font-simibold flex justify-between items-center">
-            <span>Total price: </span>
-            <span>
-              {isLoading
-                ? <i className="fas fa-spinner fa-spin pe-1"></i>
-                : "$" + userCart.data.totalCartPrice}
-            </span>
-          </p>
+          <Link
+            className="text-white font-medium sm:text-[20px] text-[18px] flex items-center gap-1"
+            to="/">
+            Shop <i class="fa-solid fa-angle-right mt-[2px]"></i>
+          </Link>
         </div>
-        <div className="btnsGroup flex w-full flex-col items-center justify-center gap-6">
-          {!userCart.numOfCartItems < 1 && (
-            <button className="bg-black hover:bg-gray-900 transition-all duration-500 text-white w-[80%] rounded-lg py-3 text-[20px]">
-              Check out
-            </button>
-          )}
-          {!userCart.numOfCartItems < 1 && (
-            <button className=" bg-red-700  text-white transition-all duration-300 w-[80%] rounded-lg py-2 text-[20px]">
-              Clear Cart
-            </button>
-          )}
+        <div className="products-cards-conteiner gap-y-10 border-b border-gray-300  pb-10 flex flex-wrap">
+          {userCart.data &&
+            userCart?.numOfCartItems > 0 &&
+            userCart?.data?.products?.map((cartItem) => (
+              <div className="card-paddeing px-5    lg:w-1/4 sm:w-1/2 w-full">
+                <div className="product-card flex-col overflow-hidden rounded-md bg-gray-50 border-[1.6px] lg:pb-8 border-gray-300  pb-3  h-[430px] min-h-[450px]">
+                  <div className="product-img w-full min-h-[60%] relative">
+                    <button className="addToWishlist absolute top-3 right-3 z-10">
+                      <i className="fa-regular fa-heart text-[22px]"></i>
+                    </button>
+
+                    <Link
+                      className="absolute w-full overflow-hidden h-full"
+                      to={`/product/${cartItem.product.id}`}>
+                      <img
+                        src={cartItem?.product?.imageCover}
+                        loading="lazy"
+                        decoding="async"
+                        className="object-cover object-center w-full h-full"
+                        alt={`image`}
+                      />
+                    </Link>
+                  </div>
+                  <div className="product-details py-4 px-3">
+                    <Link
+                      to={`/product/${cartItem.product.id}`}
+                      href="#"
+                      class="   font-bold text-gray-900 hover:underline text-xl ">
+                      {cartItem.product.title.split(" ").slice(0, 2).join(" ")}
+                    </Link>
+                    <div className="subContainer mb-10 flex justify-between items-center mt-5">
+                      <p class="text-base font-bold text-gray-900">
+                        ${cartItem.price * cartItem.count}
+                      </p>
+                      <div className="product-quantity">
+                        <div class="flex items-center">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              handleUpdateItems(
+                                cartItem.product.id,
+                                cartItem.count - 1
+                              );
+                            }}
+                            id="decrement-button"
+                            data-input-counter-decrement="counter-input"
+                            class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-gray-100">
+                            <svg
+                              class="h-2.5 w-2.5 text-gray-900 dark:text-white"
+                              aria-hidden="true"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 18 2">
+                              <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M1 1h16"
+                              />
+                            </svg>
+                          </button>
+                          <div className="relative">
+                            {loadingProducts[cartItem.product.id] && (
+                              <div className="loading absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                                <i className="fas fa-spinner fa-spin text-black"></i>
+                              </div>
+                            )}
+                            <input
+                              type="number"
+                              id="first_product"
+                              class="w-10 shrink-0 border-0 ps-[12px] bg-transparent text-center text-sm font-medium text-gray-900 focus:outline-none focus:ring-0 dark:text-white"
+                              value={
+                                loadingProducts[cartItem.product.id]
+                                  ? ""
+                                  : cartItem.count
+                              }
+                              disabled={true}
+                            />
+                          </div>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              handleUpdateItems(
+                                cartItem.product.id,
+                                cartItem.count + 1
+                              );
+                            }}
+                            id="increment-button"
+                            data-input-counter-increment="counter-input"
+                            class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700">
+                            <svg
+                              class="h-2.5 w-2.5 text-gray-900 dark:text-white"
+                              aria-hidden="true"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 18 18">
+                              <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M9 1v16M1 9h16"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="items-action w-full flex justify-end ">
+                      <button
+                        disabled={isRemoving[cartItem.product.id]}
+                        onClick={() => handleRemoveItems(cartItem.product.id)}
+                        className="text-red-700 text-[20px] rounded-md ">
+                        {isRemoving[cartItem.product.id] ? (
+                          <i class="fa-solid fa-spinner fa-spin text-[19px]"></i>
+                        ) : (
+                          <i class="fa-solid fa-trash-can text-[20px]"></i>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+        </div>
+        <div className="cart-summary w-[92%] mx-auto py-20">
+          <div className="summary-card px-5 pb-8 pt-6 rounded-lg border w-full lg:w-[40%] md:w-[70%] mx-auto border-gray-300 bg-gray-50">
+          <div className="cart-summary-title mb-20">
+            <h3 className="text-2xl font-bold text-black  mx-auto text-center">Order Summary</h3>
+          </div>
+            <div className="total-items flex justify-between items-center mb-3">
+
+              <p className="text-gray-900 font-medium ">Total Products:</p>
+
+            <p className=" text-[18px] font-semibold text-black ">( {userCart.data.products.reduce((e,a)=>{
+              
+              return (e + a.count)
+            },0)} )</p>
+            </div>
+            <div className="price flex justify-between items-center">
+              <p className="text-gray-900 font-medium ">Total Price:</p>
+
+            <p className=" text-[18px] font-semibold text-black "> ${userCart.data.totalCartPrice}</p>
+            </div>
+            <div className="btn w-full px-3 flex-col gap-2 flex  justify-center items-center mt-24">
+              <button className="bg-black text-lg min-w-[100px] rounded-lg text-white text-center mx-auto w-[50%] py-2">Checkout</button>
+              <span className="font-bold">Or</span>
+              <Link to={"/"} className=" underline">Continue Shopping</Link>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

@@ -17,10 +17,10 @@ export default function Home() {
   );
   return (
     <>
-      <div id="homePage" className="w-full h-screen lg:pt-36 pt-20 ">
+      <div id="homePage" className="w-full h-screen lg:pt-36 pt-[70px] ">
         <div
           id="homeSec"
-          className="home-section flex justify-center items-center w-full  lg:h-screen ">
+          className="home-sectionw-full relative  lg:h-[90vh] bg-red-700">
           <Suspense fallback={<SekltonHeroSection />}>
             <HeroSection />
           </Suspense>

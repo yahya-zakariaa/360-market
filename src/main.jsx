@@ -22,8 +22,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
               <IsReceiveCodeProvider>
                 <ThemeProvider>
                   <Toaster
-                    position="top-center"
-                    containerStyle={{ zIndex: 9999, top: 80 }}
+                    position="top-right"
+                    containerStyle={{ zIndex: 9999, top: 190 }}
                   />
                   <App />
                 </ThemeProvider>

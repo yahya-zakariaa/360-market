@@ -15,7 +15,6 @@ export default function Products() {
   const { addToWishList, wishlist, getWishlist } = useContext(WishlistContext);
   const { getHomeProducts, homeProducts } = useContext(ProductsContext);
   const [isLoading, setIsLoading] = useState(true);
-  const [imageLoading, setImageLoading] = useState(true);
 
   //  handel get user cart && wishlist if have token
   async function getWishlistAndCart() {
@@ -39,6 +38,7 @@ export default function Products() {
       await getHomeProducts();
     } catch (error) {
     } finally {
+      setIsLoading(false);
     }
   }
   // get products will component mount
@@ -54,7 +54,7 @@ export default function Products() {
       await addToCart(productId).then(() => {
         getUserCart().then(() => {
           toast.success("Added to cart", {
-            position: "top-center",
+            position: "top-right",
           });
         });
       });
@@ -69,7 +69,7 @@ export default function Products() {
       await addToWishList(id).then(() => {
         getWishlist().then(() => {
           toast.success("Added to wishlist", {
-            position: "top-center",
+            position: "top-right",
           });
         });
       });
@@ -94,11 +94,11 @@ export default function Products() {
         );
 
         return (
-          <div className="card-container px-5 lg:w-1/3 md:w-1/2 sm:w-full">
+          <div className="card-container px-3 lg:px-3 lg:w-1/4 md:w-1/3 w-full sm:w-1/2">
             <div
               className="product-card shadow-xl group bg-gray-100 rounded-xl overflow-hidden w-full  transition-all duration-300"
               key={item.id}>
-              <div className="card-img relative flex items-center justify-center w-full p-0 h-[450px] overflow-hidden">
+              <div className="card-img relative flex items-center justify-center w-full p-0 sm:h-[30%] h-[40%] overflow-hidden">
                 <button
                   disabled={isInWishlist}
                   onClick={(e) => {
@@ -178,7 +178,7 @@ export default function Products() {
                       HandelAddToCart(item.id);
                       e.stopPropagation();
                     }}
-                    className="  text-[35px] mr-4   flex justify-center items-center">
+                    className=" text-[25px] lg:text-[35px] mr-4   flex justify-center items-center">
                     {isInCart ? (
                       <i class="fa-solid fa-circle-check"></i>
                     ) : (

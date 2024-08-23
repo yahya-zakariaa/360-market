@@ -29,7 +29,7 @@ export default function Navbar() {
     <>
       <nav
         id="navbar"
-        className="w-full fixed  px-9 lg:px-16 md:px-16 bg-gray-100 py-1 flex lg:flex-col  top-0 z-[99999] transition-all duration-700 ">
+        className="w-full fixed    px-5 lg:px-16 md:px-16 bg-gray-100 py-1 flex lg:flex-col  top-0 z-[99999] transition-all duration-700 ">
         <div className=" pt-3 pb-5 flex justify-between w-full">
           <Link
             href="#"
@@ -42,31 +42,30 @@ export default function Navbar() {
             <input className="px-4 py-3 w-[50%] rounded-full outline-none border  border-gray-400" type="text" placeholder="Search for products " />
             <button className="bg-black text-white px-4 py-2 top-[10%] right-[25.6%] absolute rounded-full"><i class="fa-solid fa-magnifying-glass"></i> search</button>
           </div>
-          <div className="nav-actions flex gap-10 items-center  ">
-            <Badge
-              className=" mt-[-2px] me-[-8px] text-[12px] w-[1px] h-[1px] bg-gray-100 text-black"
+          <div className="nav-actions flex gap-8 lg:gap-10 items-center  ">
+           <div className="flex items-center gap-8">
+           <Badge
+              className=" mt-[-2px] me-[-7px] text-[12px] w-[1px] h-[1px] bg-transparent text-black"
               content={wishlist?.count}>
               <Link
                 to={"/wishlist"}
-                className="nav-link text-black mt-[2px] text-[24px]  nav-wishlist flex items-center">
+                className="nav-link text-black mt-[2px] md:text-[24px] text-[20px]  nav-wishlist flex items-center">
                 <i class="fa-solid fa-heart"></i>
               </Link>
             </Badge>
             <Badge
-              className=" mt-[-2px] me-[-8px] text-[12px] w-[1px] h-[1px] bg-gray-100 text-black"
-              content={userCart?.data?.products?.reduce(
-                (a, b) => a + b.count,
-                0
-              )}>
+              className="mt-[-2px] me-[-7px] text-[12px] w-[1px] h-[1px] bg-transparent text-black"
+              content={userCart?.numOfCartItems}>
               <Link
                 to={"/cart"}
-                className="nav-link text-black mt-[2px] text-[24px]  nav-wishlist flex items-center">
+                className="nav-link text-black mt-[2px] md:text-[24px] text-[20px]  nav-wishlist flex items-center">
                 <i class="fa-solid fa-bag-shopping"></i>
               </Link>
             </Badge>
+           </div>
             <button
               onClick={() => setToggle(!toggle)}
-              className="nav-toggle text-black  items-center flex me-2 text-[25px]  ">
+              className="nav-toggle text-black  items-center flex pt-[5px] md:text-[24px] text-[20px] ">
               <i class="fa-solid fa-bars"></i>
             </button>
           </div>
@@ -106,8 +105,8 @@ export default function Navbar() {
       <aside
         className={
           toggle
-            ? "w-[40%] h-screen border-l border-gray-500 lg:w-[20%] pb-8  lg:h-screen fixed top-[0px] right-0 transition-all duration-700 bg-gray-100 z-[999999]"
-            : "w-[40%] h-screen border-l border-gray-500 lg:w-[20%] pb-8  lg:h-screen fixed top-[0px] right-[-50%] transition-all duration-700 bg-gray-100 z-[999999]"
+            ? "w-[60%] h-screen border-l border-gray-500 lg:w-[20%] pb-8  lg:h-screen fixed top-[0px] right-0 transition-all duration-700 bg-gray-100 z-[999999]"
+            : "w-[60%] h-screen border-l border-gray-500 lg:w-[20%] pb-8  lg:h-screen fixed top-[0px] right-[-100%] transition-all duration-700 bg-gray-100 z-[999999]"
         }>
           <button onClick={() => setToggle(!toggle)} className="absolute top-[15px] left-[20px]"><i className="fa-solid fa-x"></i></button>
         <div className=" flex flex-col justify-between items-center h-[100%] w-full pt-10">
