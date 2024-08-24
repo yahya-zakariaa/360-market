@@ -29,11 +29,9 @@ export default function ProductsProvider({ children }) {
   // handel get all products
   async function getAllProducts() {
     try {
-      await axios
+      return await axios
         .get("https://ecommerce.routemisr.com/api/v1/products")
-        .then((response) => {
-          setAllProducts(response.data);
-        })
+        .then((response) => response)
         .catch((error) => {
           toast.error(error.response.data.message, { position: "top-center" });
         });

@@ -33,7 +33,7 @@ export default function Home() {
               Categories
             </h2>
           </div>
-          <div className="container mx-auto h-full   pb-10 px-2">
+          <div className="container mx-auto h-full flex items-center justify-center  pb-10 px-2">
             <Suspense fallback={<SkeltonCategories />}>
               <Categories />
             </Suspense>
@@ -56,7 +56,7 @@ export default function Home() {
             </div>
 
             <button className="goToProducts flex items-center gap-2 z-50  pb-[1px] my-2 text-center border-b-2 font-bold  border-black">
-              See All Offers <i class="fa-solid fa-angle-right mt-[3.1px]"></i>
+              See All Offers <i className="fa-solid fa-angle-right mt-[3.1px]"></i>
             </button>
           </div>
         </div>

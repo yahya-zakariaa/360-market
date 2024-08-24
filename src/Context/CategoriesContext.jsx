@@ -15,9 +15,7 @@ export default function CategoriesProvider({ children }) {
         .catch((error) => {
           toast.error(error.response.data.message, { position: "top-center" });
         });
-    } catch (error) {
-    } finally {
-    }
+    } catch (error) {}
   }
   return (
     <CategoriesContext.Provider value={{ getCategories, categories }}>

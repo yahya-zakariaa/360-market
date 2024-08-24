@@ -20,7 +20,7 @@ export default function Categories() {
   //  fetch categories
   useEffect(() => {
     hndelGetCategories();
-  }, [categories]);
+  }, []);
 
   if (isLoading) {
     return (

@@ -27,10 +27,10 @@ export default function Products() {
       setIsLoading(false);
     }
   }
-  localStorage.getItem("userToken") &&
+ 
     // get wishlist && cart will component mount (if have token)
     useEffect(() => {
-      getWishlistAndCart();
+      localStorage.getItem("userToken") &&  getWishlistAndCart();
     }, []);
   // handel get products
   async function getProducts() {
@@ -46,18 +46,18 @@ export default function Products() {
     getProducts();
   }, []);
 
-  console.log(homeProducts);
-
   // handel add to cart
   async function HandelAddToCart(productId) {
     if (userToken) {
-      await addToCart(productId).then(() => {
-        getUserCart().then(() => {
-          toast.success("Added to cart", {
-            position: "top-right",
-          });
+      try {
+        await addToCart(productId);
+        await getUserCart();
+      } catch (err) {
+      } finally {
+        toast.success("Added to cart", {
+          position: "top-right",
         });
-      });
+      }
     } else {
       toast.error("Please login first", { duration: 4000 });
     }
@@ -94,10 +94,10 @@ export default function Products() {
         );
 
         return (
-          <div className="card-container px-3 lg:px-3 lg:w-1/4 md:w-1/3 w-full sm:w-1/2">
-            <div
-              className="product-card shadow-xl group bg-gray-100 rounded-xl overflow-hidden w-full  transition-all duration-300"
-              key={item.id}>
+          <div
+            key={item.id}
+            className="card-container  px-3 lg:px-3 lg:w-1/4 md:w-1/3 w-full sm:w-1/2">
+            <div className="product-card shadow-xl group bg-gray-100 rounded-xl overflow-hidden w-full  transition-all duration-300">
               <div className="card-img relative flex items-center justify-center w-full p-0 sm:h-[30%] h-[40%] overflow-hidden">
                 <button
                   disabled={isInWishlist}
@@ -129,7 +129,6 @@ export default function Products() {
                       <img
                         key={index}
                         src={image}
-                        loading="lazy"
                         onLoad={() => {
                           setIsLoading(false);
                         }}

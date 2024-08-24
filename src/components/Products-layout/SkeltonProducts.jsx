@@ -4,8 +4,10 @@ import Skeleton from "react-loading-skeleton";
 export default function SkeltonProducts() {
   return Array(9)
     .fill(0)
-    .map((item) => (
-      <div className="product-container px-5 lg:w-1/3 md:w-1/2 sm:w-full">
+    .map((item, i) => (
+      <div
+        key={i}
+        className="product-container px-5 lg:w-1/3 md:w-1/2 sm:w-full">
         <div className="product-card shadow-xl group w-[400px] bg-gray-100 rounded-xl overflow-hiddentransition-all duration-300">
           <div className="card-img relative w-full p-0 h-[450px] overflow-hidden">
             <Skeleton height={"100%"} width={"100%"} />

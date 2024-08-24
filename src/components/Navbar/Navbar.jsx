@@ -35,13 +35,10 @@ export default function Navbar() {
             href="#"
             className="flex items-center gap-2 font-semibold justify-center"
             to={"/"}>
-            <i class="fa-solid fa-circle-nodes text-[30px]"></i>
+            <i className="fa-solid fa-circle-nodes text-[30px]"></i>
             <span className="text-black text-[20px]">360 Market</span>
           </Link>
-          <div className="searchBar flex-grow  justify-center relative hidden lg:flex">
-            <input className="px-4 py-3 w-[50%] rounded-full outline-none border  border-gray-400" type="text" placeholder="Search for products " />
-            <button className="bg-black text-white px-4 py-2 top-[10%] right-[25.6%] absolute rounded-full"><i class="fa-solid fa-magnifying-glass"></i> search</button>
-          </div>
+         
           <div className="nav-actions flex gap-8 lg:gap-10 items-center  ">
            <div className="flex items-center gap-8">
            <Badge
@@ -50,7 +47,7 @@ export default function Navbar() {
               <Link
                 to={"/wishlist"}
                 className="nav-link text-black mt-[2px] md:text-[24px] text-[20px]  nav-wishlist flex items-center">
-                <i class="fa-solid fa-heart"></i>
+                <i className="fa-solid fa-heart"></i>
               </Link>
             </Badge>
             <Badge
@@ -59,14 +56,14 @@ export default function Navbar() {
               <Link
                 to={"/cart"}
                 className="nav-link text-black mt-[2px] md:text-[24px] text-[20px]  nav-wishlist flex items-center">
-                <i class="fa-solid fa-bag-shopping"></i>
+                <i className="fa-solid fa-bag-shopping"></i>
               </Link>
             </Badge>
            </div>
             <button
               onClick={() => setToggle(!toggle)}
               className="nav-toggle text-black  items-center flex pt-[5px] md:text-[24px] text-[20px] ">
-              <i class="fa-solid fa-bars"></i>
+              <i className="fa-solid fa-bars"></i>
             </button>
           </div>
         </div>
@@ -148,7 +145,7 @@ export default function Navbar() {
               <Link
                 className="bg-black text-white  text-center text-[18px] py-2 flex justify-center items-center hover:text-black hover:bg-transparent border transition-all duration-500 border-transparent  hover:border-black hover:border  w-[80%] rounded-lg"
                 to={"/login"}>
-                <i class="fa-solid fa-right-to-bracket fa-flip-horizontal me-[10px]"></i>
+                <i className="fa-solid fa-right-to-bracket fa-flip-horizontal me-[10px]"></i>
                 Login{" "}
               </Link>
             )}
@@ -156,7 +153,7 @@ export default function Navbar() {
               <Link
                 className="bg-transparent text-black  text-center text-[18px] py-2 flex justify-center items-center hover:text-white hover:bg-black  transition-all duration-500 border-black  border  w-[80%] rounded-lg"
                 to={"/signup"}>
-                <i class="fa-solid fa-user me-[9px]"></i>
+                <i className="fa-solid fa-user me-[9px]"></i>
                 Signup
               </Link>
             )}
