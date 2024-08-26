@@ -21,18 +21,17 @@ export default function Shop() {
   async function handelGetAllProducts() {
     try {
       const response = await getAllProducts();
-      setProducts(response?.data?.data);
-      console.log(products);
+      setProducts(
+        response?.data?.data.filter((product) => product?.priceAfterDiscount)
+      );
     } catch (err) {
     } finally {
       setIsLoading(false);
-      setFilteredProducts(products);
     }
   }
   async function handelGetCategories() {
     try {
       await getCategories();
-      console.log(categories);
     } catch (err) {}
   }
 

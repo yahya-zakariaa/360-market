@@ -56,13 +56,13 @@ export default function Navbar() {
             </li>
             <li className="nav-item">
               <Badge className="w-[2px] h-[2px] absolute top-[3px] right-[-3px]">
-                <Link href="#" className="nav-link text-black">
+                <Link to={"/offers"} className="nav-link text-black">
                   Offers
                 </Link>
               </Badge>
             </li>
             <li className="nav-item">
-              <Link href="#" className="nav-link text-black">
+              <Link to={"/support"} className="nav-link text-black">
                 Support
               </Link>
             </li>
@@ -137,7 +137,7 @@ export default function Navbar() {
               Offers
             </Link>
             <Link
-              href="#"
+              to={"/support"}
               className="nav-item w-full lg:hidden hover:bg-gray-300  transition-all duration-200 text-center text-[18px] py-2">
               Support
             </Link>

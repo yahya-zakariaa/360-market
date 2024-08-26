@@ -13,7 +13,7 @@ export default function BestSellingProducts() {
   const { addToCart, userCart, getUserCart } = useContext(CartContext);
   const { userToken } = useContext(UserContext);
   const { addToWishList, wishlist, getWishlist } = useContext(WishlistContext);
-  const { getHomeProducts, homeProducts , getAllProducts} = useContext(ProductsContext);
+  const {  getAllProducts} = useContext(ProductsContext);
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState([]);
 

@@ -16,6 +16,8 @@ import "react-loading-skeleton/dist/skeleton.css";
 import Shop from "./pages/Shop/Shop";
 import Categories from "./pages/Category/Categories";
 import ProductsInCategory from "./pages/Category/ProductsInCategory";
+import Support from "./pages/Support/Support";
+import Offers from "./pages/Offers/Offers";
 
 function App() {
   const receiveCodeStatus = useContext(isReceiveCodeContext);
@@ -28,8 +30,10 @@ function App() {
             <Route element={<Home />} index={true} />
 
             <Route element={<Shop />} path="/shop"></Route>
+            <Route element={<Support />} path="/support"></Route>
             <Route element={<Categories />} path="/categories"></Route>
             <Route element={<ProductsInCategory />} path="/category/:categoryId"></Route>
+            <Route element={<Offers />} path="/offers"></Route>
             <Route
               element={
                 <ProtectedRoute>
