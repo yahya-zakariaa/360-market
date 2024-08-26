@@ -9,11 +9,11 @@ import { UserContext } from "../../Context/UserContext";
 import { WishlistContext } from "../../Context/Wishlist";
 import SkeltonProducts from "./SkeltonProducts";
 
-export default function Products() {
+export default function BestSellingProducts() {
   const { addToCart, userCart, getUserCart } = useContext(CartContext);
   const { userToken } = useContext(UserContext);
   const { addToWishList, wishlist, getWishlist } = useContext(WishlistContext);
-  const { getHomeProducts, homeProducts } = useContext(ProductsContext);
+  const { getHomeProducts, homeProducts , getAllProducts} = useContext(ProductsContext);
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState([]);
 
@@ -36,18 +36,19 @@ export default function Products() {
   // handel get products
   async function getProducts() {
     try {
-      await getHomeProducts();
+     const res = await getAllProducts();
+     console.log(res);
+     
+     setProducts(res.data.data.filter((product) => product.sold > 100).slice(0, 4));
     } catch (error) {
     } finally {
-      setProducts(homeProducts?.filter((product) => product.priceAfterDiscount));
-      
       setIsLoading(false);
     }
   }
   // get products will component mount
   useEffect(() => {
     getProducts();
-  }, [homeProducts]);
+  }, []);
 
   // handel add to cart
   async function HandelAddToCart(productId) {

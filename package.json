@@ -17,6 +17,7 @@
     "axios": "^1.7.3",
     "flowbite": "^2.4.1",
     "formik": "^2.4.6",
+    "gh-pages": "^6.1.1",
     "postcss": "^8.4.40",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

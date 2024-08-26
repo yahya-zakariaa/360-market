@@ -14,7 +14,7 @@ export default function ProductsProvider({ children }) {
   async function getHomeProducts() {
     try {
       await axios
-        .get("https://ecommerce.routemisr.com/api/v1/products?limit=9")
+        .get("https://ecommerce.routemisr.com/api/v1/products?limit=10")
         .then((response) => {
           setHomeProducts(response.data.data);
         })
@@ -51,18 +51,6 @@ export default function ProductsProvider({ children }) {
     } catch (error) {}
   }
 
-  // handel get related products (in product details page)
-  async function getRelatedProducts(id) {
-    try {
-      axios
-        .get(
-          `https://ecommerce.routemisr.com/api/v1/products?category[in]=${id}`
-        )
-        .then((response) => {
-          setRelatedProducts(response.data.data);
-        });
-    } catch (error) {}
-  }
   return (
     <ProductsContext.Provider
       value={{
@@ -72,7 +60,7 @@ export default function ProductsProvider({ children }) {
         allProducts,
         getProductDetails,
         productDetails,
-        getRelatedProducts,
+
         relatedProducts,
       }}>
       {children}

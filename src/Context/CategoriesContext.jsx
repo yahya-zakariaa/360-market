@@ -17,8 +17,22 @@ export default function CategoriesProvider({ children }) {
         });
     } catch (error) {}
   }
+
+  async function getProductInCategory(id) {
+    try {
+      return axios
+        .get(
+          `https://ecommerce.routemisr.com/api/v1/products?category[in]=${id}`
+        )
+        .then((response) => response);
+    } catch (error) {
+      console.error("Failed to fetch products", error);
+    }
+  }
+
   return (
-    <CategoriesContext.Provider value={{ getCategories, categories }}>
+    <CategoriesContext.Provider
+      value={{ getCategories, categories, getProductInCategory }}>
       {children}
     </CategoriesContext.Provider>
   );

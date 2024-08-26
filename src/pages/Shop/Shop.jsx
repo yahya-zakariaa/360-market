@@ -5,24 +5,34 @@ import { Link } from "react-router-dom";
 import { WishlistContext } from "../../Context/Wishlist";
 import { CartContext } from "../../Context/CartContext";
 import toast from "react-hot-toast";
+import { CategoriesContext } from "../../Context/CategoriesContext";
 
 export default function Shop() {
   const { getAllProducts } = useContext(ProductsContext);
+  const { getCategories, categories } = useContext(CategoriesContext);
   const { wishlist, getWishlist, addToWishList } = useContext(WishlistContext);
   const { userCart, getUserCart, addToCart } = useContext(CartContext);
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [filteredProductsIsEmpty, setFilteredProductsIsEmpty] = useState(false);
 
   //  handel get all products
   async function handelGetAllProducts() {
     try {
       const response = await getAllProducts();
       setProducts(response?.data?.data);
+      console.log(products);
     } catch (err) {
     } finally {
       setIsLoading(false);
     }
+  }
+  async function handelGetCategories() {
+    try {
+      await getCategories();
+      console.log(categories);
+    } catch (err) {}
   }
 
   // handel get cart And wishList
@@ -41,12 +51,12 @@ export default function Shop() {
       if (localStorage.getItem("userToken")) {
         await addToCart(productId);
         await getUserCart();
+        toast.success(" Product added to cart");
       } else {
         toast.error("please login first");
       }
     } catch (err) {
     } finally {
-      toast.success(" Product added to cart");
     }
   }
 
@@ -56,25 +66,18 @@ export default function Shop() {
       if (localStorage.getItem("userToken")) {
         await addToWishList(productId);
         await getWishlist();
+        toast.success(" Product added to wishList");
       } else {
         toast.error("please login first");
       }
     } catch (err) {
     } finally {
-      toast.success(" Product added to wishList");
     }
   }
 
-  // fetch data will component mount
-  useEffect(() => {
-    handelGetAllProducts();
-    if (localStorage.getItem("userToken")) {
-      handelGetCartAndWishlist();
-    }
-  }, [wishlist, userCart]);
   // handel sort products
   function handelSortProducts(e) {
-    const sortedProducts = [...products].sort((a, b) => {
+    const sortedProducts = [...filteredProducts].sort((a, b) => {
       switch (e.target.value) {
         case "low-price":
           return a.price - b.price;
@@ -84,66 +87,116 @@ export default function Shop() {
           return a.title.localeCompare(b.title);
         case "z-a":
           return b.title.localeCompare(a.title);
+        case "high-rating":
+          return b.ratingsAverage - a.ratingsAverage;
+        case "low-rating":
+          return a.ratingsAverage - b.ratingsAverage;
+        case "best-seller":
+          return b.sold - a.sold;
         default:
           return 0;
       }
     });
     setFilteredProducts(sortedProducts);
   }
+
   // handel search products
   function handelSearchProducts(e) {
+    setFilteredProductsIsEmpty(false);
+
     if (e.target.value == "") {
-      setFilteredProducts(products);
+      setFilteredProducts(filteredProducts);
     }
     const searchedProducts = products.filter((product) =>
       product.title
         .toLowerCase()
         .startsWith(e.target.value.toLowerCase().trim())
     );
+    if (searchedProducts.length == 0) {
+      setFilteredProductsIsEmpty(true);
+    } else {
+      setFilteredProductsIsEmpty(false);
+    }
     setFilteredProducts(searchedProducts);
   }
 
+  // handel get product in category
+  function handelGetProductInCategory(e) {
+    setFilteredProductsIsEmpty(false);
+
+    if (e.target.value == "" || e.target.value == "all") {
+      setFilteredProducts(products);
+      return;
+    }
+    const searchedProducts = products.filter(
+      (product) =>
+        product.category.name.toLowerCase() ===
+        e.target.value.toLowerCase().trim()
+    );
+    if (searchedProducts.length == 0) {
+      setFilteredProductsIsEmpty(true);
+    }
+    e;
+    setFilteredProducts(searchedProducts);
+  }
+
+  // fetch data will component mount
+  useEffect(() => {
+    handelGetAllProducts();
+    if (localStorage.getItem("userToken")) {
+      handelGetCartAndWishlist();
+    }
+  }, []);
+
+  // fetch categories
+  useEffect(() => {
+    handelGetCategories();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        <i className="fa-solid fa-spinner fa-spin fa-3x"></i>
+      </div>
+    );
+  }
+
   return (
-    <div className="shop-layout flex  flex-col h-screen lg:pt-32 pt-[70px] ">
-      <div className="sideBar w-full bg-black text-white   py-5  ">
-        <div className="container w-[97%] px-5 mx-auto flex  lg:flex-row flex-col-reverse  gap-6 lg:gap-20 justify-center lg:justify-start items-start lg:items-center">
+    <div className="shop-layout flex  flex-col h-screen lg:pt-28 pt-[60px] ">
+      <div className="sideBar w-[84%] my-5 rounded-xl mx-auto bg-black text-white   py-5  ">
+        <div className="container w-[100%] px-5 mx-auto flex  lg:flex-row flex-col-reverse  gap-6 lg:gap-20 justify-center lg:justify-start items-start lg:items-center">
           <div className="filters flex  flex-col gap-5 ps-1">
             <div className="filter-by-categories flex gap-4 items-center">
               <p className="font-medium text-[17px]">Category:</p>
               <select
                 name="select-category"
+                onChange={handelGetProductInCategory}
                 id=""
                 className=" text-black w-fit rounded-full py-1  ps-3 pe-2  ">
-                <option>All</option>
-                <option value="">Men's Fashion</option>
-                <option value="">Women's Fashion</option>
-                <option value="">Home</option>
-                <option value="">Super Market</option>
-                <option value="">Beauty & Health</option>
-                <option value="">Baby & Toys</option>
-                <option value="">Books</option>
-                <option value="">Electronics</option>
-                <option value="">Mobiles</option>
-                <option value="">Music</option>
+                <option value="all">All</option>
+                {categories?.map((category) => (
+                  <option key={category._id} value={category.name}>
+                    {category.name}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="filter flex gap-4 items-center">
               <p className="font-medium text-[17px]">
-                <i class="fa-solid fa-arrow-down-wide-short"></i> Sort By{" "}
+                <i class="fa-solid fa-arrow-down-wide-short"></i> Sort By
               </p>
               <select
                 name="filter-by"
                 onChange={handelSortProducts}
                 id=""
                 className="w-fit  text-black rounded-full py-1 ps-3 pe-5  ">
-                <option value="">defult</option>
                 <option value="high-price">High Price</option>
                 <option value="low-price">Low Price</option>
                 <option value="high-rating">High Rating</option>
                 <option value="low-rating">Low Rating</option>
                 <option value="a-z">A-Z</option>
                 <option value="z-a">Z-A</option>
-                <option value="best-selling">Best Selleing</option>
+                <option value="best-seller">Best Seller</option>
               </select>
             </div>
           </div>
@@ -160,215 +213,221 @@ export default function Shop() {
       <div className="container px-1   w-[96%]  mx-auto pb-14  ">
         <div className="resulte px-5  mt-10 mb-5">
           <h3 className="text-gray-700 text-xl">
-            ({" "}
-            {products?.length || (
-              <i className="fas fa-spinner fa-spin text-[18px]"></i>
-            )}{" "}
+            (
+            {!filteredProductsIsEmpty
+              ? filteredProducts?.length ||
+                products?.length || (
+                  <i className="fas fa-spinner fa-spin text-[18px]"></i>
+                )
+              : 0}
             ) Resulte
           </h3>
         </div>
-        <div className="content w-full overflow-auto mx-auto gap-y-14 flex flex-wrap justify-center">
-          {filteredProducts &&
-            filteredProducts?.map((item) => {
-              const isInWishlist =
-                wishlist?.data?.some((product) => product.id === item.id) ||
-                false;
-              const isInCart =
-                userCart?.data?.products?.some(
-                  (product) => product.product.id === item.id
-                ) || false;
-              return (
-                <div
-                  key={item.id}
-                  className="card-container px-5 lg:w-1/4 md:w-1/3 sm:w-1/2 w-[85%] ">
-                  <div className="product-card shadow-xl group bg-gray-100 rounded-xl overflow-hidden w-full  transition-all duration-300">
-                    <div className="card-img relative flex items-center justify-center w-full p-0 sm:h-[250px] md:h-[300px] h-[250px] lg:h-[300px] overflow-hidden">
-                      <button
-                        disabled={isInWishlist}
-                        onClick={() => {
-                          HandelAddToWishList(item.id);
-                        }}
-                        className={`absolute top-4 text-[25px] right-4 z-30 ${
-                          isInWishlist ? "text-red-700" : ""
-                        }`}>
-                        {isInWishlist ? (
-                          <i class="fa-solid fa-heart"></i>
-                        ) : (
-                          <i class="fa-regular fa-heart"></i>
-                        )}
-                      </button>
-
-                      {item.priceAfterDiscount && (
-                        <div className="bg-red-700 z-50 w-[125px] h-[40px] absolute top-[10px] left-[-35px] rotate-[-45deg] flex justify-center items-center text-white">
-                          Sale
-                        </div>
-                      )}
-                      <Carousel
-                        className="w-full mx-auto h-full  overflow-hidden"
-                        navigation={false}
-                        loop={true}>
-                        {item.images.map((image, index) => (
-                          <Link to={`/product/${item.id}`}>
-                            <img
-                              key={index}
-                              src={image}
-                              className="object-cover w-full h-full"
-                              alt={`image ${index + 1}`}
-                            />
-                          </Link>
-                        ))}
-                      </Carousel>
-                    </div>
-                    <div className="card-body px-3 py-5 h-[180px]">
-                      <h2 className="card-category mb-1 hover:underline text-blue-700 ">
-                        {item.category.name}
-                      </h2>
-                      <Link to={`/product/${item.id}`}>
-                        <h2 className="card-title mb-1 hover:underline">
-                          {item.title ? (
-                            item.title.split(" ").slice(0, 3).join(" ")
-                          ) : (
-                            <Skeleton width={200} />
-                          )}
-                        </h2>
-                      </Link>
-                      <div className="product-rateing my-[3px]">
-                        <p>
-                          <i class="fa-solid fa-star me-1 text-yellow-600"></i>
-                          {item.ratingsAverage} ( {item.ratingsQuantity})
-                        </p>
-                      </div>
-                      <div className="card-footer flex justify-between items-center">
-                        {item.priceAfterDiscount ? (
-                          <p className="card-price flex items-center text-lg font-bold">
-                            ${item.priceAfterDiscount}
-                            <s className="text-gray-600 text-sm ms-1  font-normal ">
-                              {" "}
-                              ${item.price}
-                            </s>
-                          </p>
-                        ) : (
-                          <p>${item.price}</p>
-                        )}
+        {filteredProductsIsEmpty ? (
+          <div className="text-center">No Resulte</div>
+        ) : (
+          <div className="content w-full overflow-auto mx-auto gap-y-14 flex flex-wrap justify-center md:justify-start">
+            {filteredProducts.length > 0 &&
+              filteredProducts?.map((item) => {
+                const isInWishlist =
+                  wishlist?.data?.some((product) => product.id === item.id) ||
+                  false;
+                const isInCart =
+                  userCart?.data?.products?.some(
+                    (product) => product.product.id === item.id
+                  ) || false;
+                return (
+                  <div
+                    key={item.id}
+                    className="card-container px-5 lg:w-1/4 md:w-1/3 sm:w-1/2 w-[85%] ">
+                    <div className="product-card shadow-xl group bg-gray-100 rounded-xl overflow-hidden w-full  transition-all duration-300">
+                      <div className="card-img relative flex items-center justify-center w-full p-0 sm:h-[250px] md:h-[300px] h-[250px] lg:h-[300px] overflow-hidden">
                         <button
-                          disabled={isInCart}
+                          disabled={isInWishlist}
                           onClick={() => {
-                            HandelAddToCart(item.id);
+                            HandelAddToWishList(item.id);
                           }}
-                          className="  text-[35px] mr-4   flex justify-center items-center">
-                          {isInCart ? (
-                            <i class="fa-solid fa-circle-check"></i>
+                          className={`absolute top-4 text-[25px] right-4 z-30 ${
+                            isInWishlist ? "text-red-700" : ""
+                          }`}>
+                          {isInWishlist ? (
+                            <i class="fa-solid fa-heart"></i>
                           ) : (
-                            <i class="fa-solid fa-circle-plus"></i>
+                            <i class="fa-regular fa-heart"></i>
                           )}
                         </button>
+
+                        {item.priceAfterDiscount && (
+                          <div className="bg-red-700 z-50 w-[125px] h-[40px] absolute top-[10px] left-[-35px] rotate-[-45deg] flex justify-center items-center text-white">
+                            Sale
+                          </div>
+                        )}
+                        <Carousel
+                          className="w-full mx-auto h-full  overflow-hidden"
+                          navigation={false}
+                          loop={true}>
+                          {item.images.map((image, index) => (
+                            <Link to={`/product/${item.id}`}>
+                              <img
+                                key={index}
+                                src={image}
+                                className="object-cover w-full h-full"
+                                alt={`image ${index + 1}`}
+                              />
+                            </Link>
+                          ))}
+                        </Carousel>
+                      </div>
+                      <div className="card-body px-3 py-5 h-[180px]">
+                        <h2 className="card-category mb-1 hover:underline text-blue-700 ">
+                          {item.category.name}
+                        </h2>
+                        <Link to={`/product/${item.id}`}>
+                          <h2 className="card-title mb-1 hover:underline">
+                            {item.title ? (
+                              item.title.split(" ").slice(0, 3).join(" ")
+                            ) : (
+                              <Skeleton width={200} />
+                            )}
+                          </h2>
+                        </Link>
+                        <div className="product-rateing my-[3px]">
+                          <p>
+                            <i class="fa-solid fa-star me-1 text-yellow-600"></i>
+                            {item.ratingsAverage} ( {item.ratingsQuantity})
+                          </p>
+                        </div>
+                        <div className="card-footer flex justify-between items-center">
+                          {item.priceAfterDiscount ? (
+                            <p className="card-price flex items-center text-lg font-bold">
+                              ${item.priceAfterDiscount}
+                              <s className="text-gray-600 text-sm ms-1  font-normal ">
+                                ${item.price}
+                              </s>
+                            </p>
+                          ) : (
+                            <p>${item.price}</p>
+                          )}
+                          <button
+                            disabled={isInCart}
+                            onClick={() => {
+                             localStorage.getItem("userToken") &HandelAddToCart(item.id);
+                            }}
+                            className="  text-[35px] mr-4   flex justify-center items-center">
+                            {isInCart ? (
+                              <i class="fa-solid fa-circle-check"></i>
+                            ) : (
+                              <i class="fa-solid fa-circle-plus"></i>
+                            )}
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          {products &&
-            products?.map((item) => {
-              const isInWishlist =
-                wishlist?.data?.some((product) => product.id === item.id) ||
-                false;
-              const isInCart =
-                userCart?.data?.products?.some(
-                  (product) => product.product.id === item.id
-                ) || false;
-              return (
-                <div
-                  key={item.id}
-                  className="card-container px-5 lg:w-1/4 md:w-1/3 sm:w-1/2 w-[85%] ">
-                  <div className="product-card shadow-xl group bg-gray-100 rounded-xl overflow-hidden w-full  transition-all duration-300">
-                    <div className="card-img relative flex items-center justify-center w-full p-0 sm:h-[250px] md:h-[300px] h-[250px] lg:h-[300px] overflow-hidden">
-                      <button
-                        disabled={isInWishlist}
-                        onClick={() => {
-                          HandelAddToWishList(item.id);
-                        }}
-                        className={`absolute top-4 text-[25px] right-4 z-30 ${
-                          isInWishlist ? "text-red-700" : ""
-                        }`}>
-                        {isInWishlist ? (
-                          <i class="fa-solid fa-heart"></i>
-                        ) : (
-                          <i class="fa-regular fa-heart"></i>
-                        )}
-                      </button>
-
-                      {item.priceAfterDiscount && (
-                        <div className="bg-red-700 z-50 w-[125px] h-[40px] absolute top-[10px] left-[-35px] rotate-[-45deg] flex justify-center items-center text-white">
-                          Sale
-                        </div>
-                      )}
-                      <Carousel
-                        className="w-full mx-auto h-full  overflow-hidden"
-                        navigation={false}
-                        loop={true}>
-                        {item.images.map((image, index) => (
-                          <Link to={`/product/${item.id}`}>
-                            <img
-                              key={index}
-                              src={image}
-                              className="object-cover w-full h-full"
-                              alt={`image ${index + 1}`}
-                            />
-                          </Link>
-                        ))}
-                      </Carousel>
-                    </div>
-                    <div className="card-body px-3 py-5 h-[180px]">
-                      <h2 className="card-category mb-1 hover:underline text-blue-700 ">
-                        {item.category.name}
-                      </h2>
-                      <Link to={`/product/${item.id}`}>
-                        <h2 className="card-title mb-1 hover:underline">
-                          {item.title ? (
-                            item.title.split(" ").slice(0, 3).join(" ")
-                          ) : (
-                            <Skeleton width={200} />
-                          )}
-                        </h2>
-                      </Link>
-                      <div className="product-rateing my-[3px]">
-                        <p>
-                          <i class="fa-solid fa-star me-1 text-yellow-600"></i>
-                          {item.ratingsAverage} ( {item.ratingsQuantity})
-                        </p>
-                      </div>
-                      <div className="card-footer flex justify-between items-center">
-                        {item.priceAfterDiscount ? (
-                          <p className="card-price flex items-center text-lg font-bold">
-                            ${item.priceAfterDiscount}
-                            <s className="text-gray-600 text-sm ms-1  font-normal ">
-                              {" "}
-                              ${item.price}
-                            </s>
-                          </p>
-                        ) : (
-                          <p>${item.price}</p>
-                        )}
+                );
+              })}
+            {products &&
+              filteredProducts.length < 1 &&
+              products?.map((item) => {
+                const isInWishlist =
+                  wishlist?.data?.some((product) => product.id === item.id) ||
+                  false;
+                const isInCart =
+                  userCart?.data?.products?.some(
+                    (product) => product.product.id === item.id
+                  ) || false;
+                return (
+                  <div
+                    key={item.id}
+                    className="card-container px-5 lg:w-1/4 md:w-1/3 sm:w-1/2 w-[85%] ">
+                    <div className="product-card shadow-xl group bg-gray-100 rounded-xl overflow-hidden w-full  transition-all duration-300">
+                      <div className="card-img relative flex items-center justify-center w-full p-0 sm:h-[250px] md:h-[300px] h-[250px] lg:h-[300px] overflow-hidden">
                         <button
-                          disabled={isInCart}
+                          disabled={isInWishlist}
                           onClick={() => {
-                            HandelAddToCart(item.id);
+                            HandelAddToWishList(item.id);
                           }}
-                          className="  text-[35px] mr-4   flex justify-center items-center">
-                          {isInCart ? (
-                            <i class="fa-solid fa-circle-check"></i>
+                          className={`absolute top-4 text-[25px] right-4 z-30 ${
+                            isInWishlist ? "text-red-700" : ""
+                          }`}>
+                          {isInWishlist ? (
+                            <i class="fa-solid fa-heart"></i>
                           ) : (
-                            <i class="fa-solid fa-circle-plus"></i>
+                            <i class="fa-regular fa-heart"></i>
                           )}
                         </button>
+
+                        {item.priceAfterDiscount && (
+                          <div className="bg-red-700 z-50 w-[125px] h-[40px] absolute top-[10px] left-[-35px] rotate-[-45deg] flex justify-center items-center text-white">
+                            Sale
+                          </div>
+                        )}
+                        <Carousel
+                          className="w-full mx-auto h-full  overflow-hidden"
+                          navigation={false}
+                          loop={true}>
+                          {item.images.map((image, index) => (
+                            <Link to={`/product/${item.id}`}>
+                              <img
+                                key={index}
+                                src={image}
+                                className="object-cover w-full h-full"
+                                alt={`image ${index + 1}`}
+                              />
+                            </Link>
+                          ))}
+                        </Carousel>
+                      </div>
+                      <div className="card-body px-3 py-5 h-[180px]">
+                        <h2 className="card-category mb-1 hover:underline text-blue-700 ">
+                          {item.category.name}
+                        </h2>
+                        <Link to={`/product/${item.id}`}>
+                          <h2 className="card-title mb-1 hover:underline">
+                            {item.title ? (
+                              item.title.split(" ").slice(0, 3).join(" ")
+                            ) : (
+                              <Skeleton width={200} />
+                            )}
+                          </h2>
+                        </Link>
+                        <div className="product-rateing my-[3px]">
+                          <p>
+                            <i class="fa-solid fa-star me-1 text-yellow-600"></i>
+                            {item.ratingsAverage} ( {item.ratingsQuantity})
+                          </p>
+                        </div>
+                        <div className="card-footer flex justify-between items-center">
+                          {item.priceAfterDiscount ? (
+                            <p className="card-price flex items-center text-lg font-bold">
+                              ${item.priceAfterDiscount}
+                              <s className="text-gray-600 text-sm ms-1  font-normal ">
+                                ${item.price}
+                              </s>
+                            </p>
+                          ) : (
+                            <p>${item.price}</p>
+                          )}
+                          <button
+                            disabled={isInCart}
+                            onClick={() => {
+                             localStorage.getItem("userToken") & HandelAddToCart(item.id);
+                            }}
+                            className="  text-[35px] mr-4   flex justify-center items-center">
+                            {isInCart ? (
+                              <i class="fa-solid fa-circle-check"></i>
+                            ) : (
+                              <i class="fa-solid fa-circle-plus"></i>
+                            )}
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-        </div>
+                );
+              })}
+          </div>
+        )}
       </div>
     </div>
   );

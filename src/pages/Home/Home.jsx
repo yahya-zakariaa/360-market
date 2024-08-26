@@ -4,6 +4,7 @@ import "@splidejs/react-splide/css";
 import SkeltonCategories from "../../components/categories/SkeltonCategories";
 import SkeltonProducts from "../../components/Products-layout/SkeltonProducts";
 import SekltonHeroSection from "../../components/HeroSection/SekltonHeroSection";
+import BestSellingProducts from "../../components/Products-layout/BestSellingProducts";
 
 export default function Home() {
   const Categories = React.lazy(() =>
@@ -15,9 +16,12 @@ export default function Home() {
   const HeroSection = React.lazy(() =>
     import("../../components/HeroSection/HeroSction")
   );
+  const BestSelling = React.lazy(() =>
+    import("../../components/Products-layout/BestSellingProducts")
+  );
   return (
     <>
-      <div id="homePage" className="w-full h-screen lg:pt-36 pt-[70px] ">
+      <div id="homePage" className="w-full h-screen lg:pt-30 pt-[70px] ">
         <div
           id="homeSec"
           className="home-sectionw-full relative  lg:h-[90vh] bg-red-700">
@@ -39,25 +43,46 @@ export default function Home() {
             </Suspense>
           </div>
         </div>
-        <div id="ProductsSec" className="Products py-16 ">
+        <div id="ProductsSec" className="Products pt-16 pb-12 border-b">
           <div className="category-title flex justify-start w-full">
-            <div className=" container mx-auto h-full w-full lg:px-7 px-5">
-              <h2 className="text-2xl font-bold  text-black   inline-block ">
+            <div className=" container mx-auto flex justify-between items-center h-full w-full lg:px-4 px-8">
+              <h2 className="text-xl font-bold  text-black   inline-block ">
                 Special Deals
               </h2>
+              <button className="goToProducts flex items-center gap-1 z-50  pt-2  text-center   text-[16px]">
+                See All Offers{" "}
+                <i className="fa-solid fa-angle-right mt-[.5px]"></i>
+              </button>
             </div>
           </div>
 
-          <div className="container mx-auto h-full w-full flex flex-col items-center  pt-12 lg:px-0 px-5">
-            <div className="product flex-wrap flex  gap-y-16 justify-center mb-12 w-full">
+          <div className="container mx-auto h-full w-full flex flex-col items-center  pt-10 lg:px-0 px-5">
+            <div className="product flex-wrap flex  gap-y-16 justify-center mb-12 w-full ">
               <Suspense fallback={<SkeltonProducts />}>
                 <Products />
               </Suspense>
             </div>
+          </div>
+        </div>
+        <div id="ProductsSec" className="Products py-16 ">
+          <div className="category-title flex justify-start w-full">
+            <div className=" container mx-auto flex justify-between items-center h-full w-full lg:px-4 px-8">
+              <h2 className="text-xl font-bold  text-black   inline-block ">
+                Best Selling
+              </h2>
+              <button className="goToProducts flex items-center gap-1 z-50  pt-2  text-center   text-[16px]">
+                See All
+                <i className="fa-solid fa-angle-right mt-[.5px]"></i>
+              </button>
+            </div>
+          </div>
 
-            <button className="goToProducts flex items-center gap-2 z-50  pb-[1px] my-2 text-center border-b-2 font-bold  border-black">
-              See All Offers <i className="fa-solid fa-angle-right mt-[3.1px]"></i>
-            </button>
+          <div className="container mx-auto h-full w-full flex flex-col items-center  pt-10 lg:px-0 px-5">
+            <div className="product flex-wrap flex  gap-y-16 justify-center mb-12 w-full ">
+              <Suspense fallback={<SkeltonProducts />}>
+                <BestSellingProducts />
+              </Suspense>
+            </div>
           </div>
         </div>
       </div>
