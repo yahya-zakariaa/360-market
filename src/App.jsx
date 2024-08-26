@@ -18,6 +18,9 @@ import Categories from "./pages/Category/Categories";
 import ProductsInCategory from "./pages/Category/ProductsInCategory";
 import Support from "./pages/Support/Support";
 import Offers from "./pages/Offers/Offers";
+import NotFound from "./pages/NotFound/NotFound";
+import Checkout from "./pages/Checkout/Checkout";
+import CheckoutSuccess from "./pages/Cart/CheckoutSuccess";
 
 function App() {
   const receiveCodeStatus = useContext(isReceiveCodeContext);
@@ -32,8 +35,11 @@ function App() {
             <Route element={<Shop />} path="/shop"></Route>
             <Route element={<Support />} path="/support"></Route>
             <Route element={<Categories />} path="/categories"></Route>
-            <Route element={<ProductsInCategory />} path="/category/:categoryId"></Route>
+            <Route
+              element={<ProductsInCategory />}
+              path="/category/:categoryId"></Route>
             <Route element={<Offers />} path="/offers"></Route>
+            <Route element={<NotFound />} path="/*"></Route>
             <Route
               element={
                 <ProtectedRoute>
@@ -41,6 +47,16 @@ function App() {
                 </ProtectedRoute>
               }
               path="/cart"
+            />
+
+            <Route element={<CheckoutSuccess />} path="/success/cart" />
+            <Route
+              element={
+                <ProtectedRoute>
+                  <Checkout />
+                </ProtectedRoute>
+              }
+              path="/checkout"
             />
             <Route
               element={

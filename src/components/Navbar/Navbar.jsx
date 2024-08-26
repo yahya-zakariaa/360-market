@@ -30,7 +30,7 @@ export default function Navbar() {
       <nav
         id="navbar"
         className="w-full fixed    px-5 lg:px-16 md:px-16 bg-gray-100 py-1 flex lg:flex-col  top-0 z-[99999] transition-all duration-700 ">
-        <div className=" pt-3 pb-5 flex justify-between w-full">
+        <div className=" py-5 flex justify-between w-full">
           <Link
             href="#"
             className="flex items-center gap-2 font-semibold justify-center"
@@ -40,7 +40,7 @@ export default function Navbar() {
           </Link>
           <ul className=" justify-start items-center w-fit gap-[50px] hidden lg:flex md:flex">
             <li className="nav-item">
-              <Link href="#" className="nav-link text-black" to={"/"}>
+              <Link className="nav-link text-black" to={"/"}>
                 Home
               </Link>
             </li>
@@ -50,7 +50,7 @@ export default function Navbar() {
               </Link>
             </li>
             <li className="nav-item">
-              <Link href="#" className="nav-link text-black" to={"/categories"}>
+              <Link className="nav-link text-black" to={"/categories"}>
                 Categories
               </Link>
             </li>
@@ -132,7 +132,7 @@ export default function Navbar() {
               Categories
             </Link>
             <Link
-              href="#"
+              to={"/offers"}
               className="nav-item w-full lg:hidden hover:bg-gray-300  transition-all duration-200 text-center text-[18px] py-2">
               Offers
             </Link>
@@ -141,11 +141,11 @@ export default function Navbar() {
               className="nav-item w-full lg:hidden hover:bg-gray-300  transition-all duration-200 text-center text-[18px] py-2">
               Support
             </Link>
-           
+
             <Link
               href="#"
               className="nav-item w-full hover:bg-gray-300  transition-all duration-200 text-center text-[18px] py-2">
-             <i className="fa-solid fa-gear me-1"></i>  Settenig
+              <i className="fa-solid fa-gear me-1"></i> Settenig
             </Link>
           </ul>
           <div className="btns-group w-full flex flex-col  items-center justify-center gap-5">

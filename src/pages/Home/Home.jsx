@@ -5,6 +5,7 @@ import SkeltonCategories from "../../components/categories/SkeltonCategories";
 import SkeltonProducts from "../../components/Products-layout/SkeltonProducts";
 import SekltonHeroSection from "../../components/HeroSection/SekltonHeroSection";
 import BestSellingProducts from "../../components/Products-layout/BestSellingProducts";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   const Categories = React.lazy(() =>
@@ -47,10 +48,10 @@ export default function Home() {
               <h2 className="text-xl font-bold  text-black   inline-block ">
                 Special Deals
               </h2>
-              <button className="goToProducts flex items-center gap-1 z-50  pt-2  text-center   text-[16px]">
+              <Link to={"/offers"} className="goToProducts flex items-center gap-1 z-50  pt-2  text-center   text-[16px]">
                 See All Offers{" "}
                 <i className="fa-solid fa-angle-right mt-[.5px]"></i>
-              </button>
+              </Link>
             </div>
           </div>
 
@@ -68,10 +69,10 @@ export default function Home() {
               <h2 className="text-xl font-bold  text-black   inline-block ">
                 Best Selling
               </h2>
-              <button className="goToProducts flex items-center gap-1 z-50  pt-2  text-center   text-[16px]">
+              <Link to={"/shop"} className="goToProducts flex items-center gap-1 z-50  pt-2  text-center   text-[16px]">
                 See All
                 <i className="fa-solid fa-angle-right mt-[.5px]"></i>
-              </button>
+              </Link>
             </div>
           </div>
 

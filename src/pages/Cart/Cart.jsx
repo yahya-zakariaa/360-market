@@ -95,7 +95,7 @@ export default function Cart() {
             userCart?.data?.products?.map((cartItem) => {
               const isInWishlist = wishlist?.data?.some(
                 (wishlistItem) => wishlistItem.id === cartItem.product.id
-              )
+              );
               return (
                 <div
                   key={cartItem.product.id}
@@ -103,12 +103,12 @@ export default function Cart() {
                   <div className="product-card flex-col overflow-hidden rounded-md bg-gray-50 border-[1.6px] lg:pb-8 border-gray-300  pb-3 h-[500px] lg:h-[400px]  md:h-[430px] min-h-[450px]">
                     <div className="product-img w-full h-[65%] lg:h-[65%]   md:h-[60%] relative">
                       <button
-                      disabled={isInWishlist}
+                        disabled={isInWishlist}
                         onClick={() => HandelAddToWishList(cartItem.product.id)}
                         className="addToWishlist absolute top-3 right-3 z-10">
                         {isInWishlist ? (
-                          <i className="fa-solid fa-heart text-red-700 text-[24px]"></i> 
-                        ): (
+                          <i className="fa-solid fa-heart text-red-700 text-[24px]"></i>
+                        ) : (
                           <i className="fa-regular fa-heart text-[24px] "></i>
                         )}
                       </button>
@@ -240,11 +240,15 @@ export default function Cart() {
                 Order Summary
               </h3>
             </div>
-           
+
             <div className="price flex justify-between items-center">
-              <p className="text-gray-900 font-medium ">Total Price ({userCart.data.products.reduce((e, a) => {
+              <p className="text-gray-900 font-medium ">
+                Total Price (
+                {userCart.data.products.reduce((e, a) => {
                   return e + a.count;
-                }, 0)} items) :</p>
+                }, 0)}{" "}
+                items) :
+              </p>
 
               <p className=" text-[18px] font-semibold text-black ">
                 {" "}
@@ -252,9 +256,11 @@ export default function Cart() {
               </p>
             </div>
             <div className="btn w-full px-3 flex-col gap-2 flex  justify-center items-center mt-24">
-              <button className="bg-black text-lg min-w-[100px] rounded-lg text-white text-center mx-auto w-[50%] py-2">
+              <Link
+                to={"/checkout"}
+                className="bg-black text-lg min-w-[100px] rounded-lg text-white text-center mx-auto w-[50%] py-2">
                 Checkout
-              </button>
+              </Link>
               <span className="font-bold">Or</span>
               <Link to={"/"} className=" underline">
                 Continue Shopping
