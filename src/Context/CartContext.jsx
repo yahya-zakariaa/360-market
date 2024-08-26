@@ -9,14 +9,13 @@ export default function CartProvider({ children }) {
 
   async function getUserCart() {
     try {
-      const response = await axios.get(
-        "https://ecommerce.routemisr.com/api/v1/cart",
-        {
+      const response =
+        localStorage.getItem("userToken") &&
+        (await axios.get("https://ecommerce.routemisr.com/api/v1/cart", {
           headers: {
             token: JSON.parse(localStorage.getItem("userToken")),
           },
-        }
-      );
+        }));
       setUserCart(response.data);
     } catch (error) {}
   }
@@ -35,8 +34,7 @@ export default function CartProvider({ children }) {
           },
         }
       )
-      .then((response) => {
-      })
+      .then((response) => {})
       .catch((error) => {
         toast.error(error.response.data.message, { position: "top-center" });
       });

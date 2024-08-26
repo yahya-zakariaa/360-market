@@ -4,7 +4,7 @@ import slider2 from "../../assets/slider-2.jpg";
 import slider3 from "../../assets/slider-3.jpg";
 export default function HeroSction() {
   return (
-    <div className="hero-section relative bg-green-500 w-full h-full ">
+    <div className="hero-section relative  w-full h-full ">
       <div className="content absolute md:top-20 top-12 left-[7%] w-fit">
         <h3 className="md:text-4xl font-bold sm:text-2xl text-lg">
           Sale Up To <span className="text-red-600">50%</span>{" "}

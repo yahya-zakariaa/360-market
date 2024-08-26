@@ -22,9 +22,7 @@ export default function Home() {
   return (
     <>
       <div id="homePage" className="w-full h-screen lg:pt-30 pt-[70px] ">
-        <div
-          id="homeSec"
-          className="home-sectionw-full relative  lg:h-[90vh] bg-red-700">
+        <div id="homeSec" className="home-sectionw-full relative  lg:h-[90vh] ">
           <Suspense fallback={<SekltonHeroSection />}>
             <HeroSection />
           </Suspense>

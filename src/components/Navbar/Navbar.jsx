@@ -70,6 +70,11 @@ export default function Navbar() {
 
           <div className="nav-actions flex gap-8 lg:gap-10 items-center  ">
             <div className="flex items-center gap-8">
+              <Link
+                to={"/shop"}
+                className="nav-link text-black me-[-7px] md:text-[24px] text-[20px]  nav-wishlist flex items-center">
+                <i className="fa-solid fa-magnifying-glass"></i>
+              </Link>
               <Badge
                 className=" mt-[-2px] me-[-7px] text-[12px] w-[1px] h-[1px] bg-transparent text-black"
                 content={wishlist?.count}>
@@ -110,37 +115,38 @@ export default function Navbar() {
         </button>
         <div className=" flex flex-col justify-between items-center h-[100%] w-full pt-10">
           <ul className="flex flex-col items-center py-7 gap-3 w-full">
-            <a
-              href="#"
-              className="nav-item w-full hover:bg-gray-300  transition-all duration-200 text-center text-[18px] py-2">
+            <Link
+              to={"/"}
+              className="nav-item w-full lg:hidden hover:bg-gray-300  transition-all duration-200 text-center text-[18px] py-2">
               home
-            </a>
+            </Link>
 
-            <a
-              href="#"
-              className="nav-item w-full hover:bg-gray-300  transition-all duration-200 text-center text-[18px] py-2">
-              Products
-            </a>
-            <a
-              href="#"
-              className="nav-item w-full hover:bg-gray-300  transition-all duration-200 text-center text-[18px] py-2">
+            <Link
+              to={"/shop"}
+              className="nav-item w-full lg:hidden hover:bg-gray-300  transition-all duration-200 text-center text-[18px] py-2">
+              Shop
+            </Link>
+            <Link
+              to={"/categories"}
+              className="nav-item w-full lg:hidden hover:bg-gray-300  transition-all duration-200 text-center text-[18px] py-2">
               Categories
-            </a>
-            <a
+            </Link>
+            <Link
               href="#"
-              className="nav-item w-full hover:bg-gray-300  transition-all duration-200 text-center text-[18px] py-2">
+              className="nav-item w-full lg:hidden hover:bg-gray-300  transition-all duration-200 text-center text-[18px] py-2">
               Offers
-            </a>
-            <a
+            </Link>
+            <Link
               href="#"
-              className="nav-item w-full hover:bg-gray-300  transition-all duration-200 text-center text-[18px] py-2">
-              Settenig
-            </a>
-            <a
-              href="#"
-              className="nav-item w-full hover:bg-gray-300  transition-all duration-200 text-center text-[18px] py-2">
+              className="nav-item w-full lg:hidden hover:bg-gray-300  transition-all duration-200 text-center text-[18px] py-2">
               Support
-            </a>
+            </Link>
+           
+            <Link
+              href="#"
+              className="nav-item w-full hover:bg-gray-300  transition-all duration-200 text-center text-[18px] py-2">
+             <i className="fa-solid fa-gear me-1"></i>  Settenig
+            </Link>
           </ul>
           <div className="btns-group w-full flex flex-col  items-center justify-center gap-5">
             {!localStorage.getItem("userToken") && (

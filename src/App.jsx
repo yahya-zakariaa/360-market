@@ -15,6 +15,7 @@ import WishList from "./pages/WishList/WishList";
 import "react-loading-skeleton/dist/skeleton.css";
 import Shop from "./pages/Shop/Shop";
 import Categories from "./pages/Category/Categories";
+import ProductsInCategory from "./pages/Category/ProductsInCategory";
 
 function App() {
   const receiveCodeStatus = useContext(isReceiveCodeContext);
@@ -28,6 +29,7 @@ function App() {
 
             <Route element={<Shop />} path="/shop"></Route>
             <Route element={<Categories />} path="/categories"></Route>
+            <Route element={<ProductsInCategory />} path="/category/:categoryId"></Route>
             <Route
               element={
                 <ProtectedRoute>

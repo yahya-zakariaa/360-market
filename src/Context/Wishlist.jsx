@@ -29,18 +29,21 @@ export default function WishlistProvider({ children }) {
   //     get wishlist
   async function getWishlist() {
     try {
-      await axios
-        .get("https://ecommerce.routemisr.com/api/v1/wishlist", {
-          headers: {
-            token: JSON.parse(localStorage.getItem("userToken")),
-          },
-        })
-        .then((response) => {
-          setWishlist(response.data);
-        })
-        .catch((error) => {
-          toast.error(error.response.data.message, { position: "top-center" });
-        });
+      localStorage.getItem("userToken") &&
+        (await axios
+          .get("https://ecommerce.routemisr.com/api/v1/wishlist", {
+            headers: {
+              token: JSON.parse(localStorage.getItem("userToken")),
+            },
+          })
+          .then((response) => {
+            setWishlist(response.data);
+          })
+          .catch((error) => {
+            toast.error(error.response.data.message, {
+              position: "top-center",
+            });
+          }));
     } catch (error) {}
   }
 
